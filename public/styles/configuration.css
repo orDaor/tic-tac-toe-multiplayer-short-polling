@@ -1,0 +1,17 @@
+#game-config {
+  text-align: center;
+  margin: 5rem auto 0 auto;
+  padding: 1rem;
+  width: 90%;
+  background-color: white;
+  border-radius: 6px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  box-sizing: border-box;
+}
+
+/* width >= 768px */
+@media (min-width: 768px) {
+  #game-config {
+    width: 40rem;
+  }
+}

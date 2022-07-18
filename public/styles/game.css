@@ -1,0 +1,81 @@
+#active-game {
+  text-align: center;
+  margin: 2rem 0 5rem 0;
+  display: none;
+}
+
+#game-over {
+  width: 90%;
+  max-width: 48rem;
+  margin: 1rem auto;
+  padding: 2rem 2rem;
+  box-sizing: border-box;
+  background-color: var(--color-primary-700);
+  color: white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+}
+
+#game-over h2 {
+  font-size: var(--font-size-7);
+  margin: 0.5rem 0;
+}
+
+#game-turn {
+  font-size: var(--font-size-3);
+}
+
+#active-player-name {
+  font-weight: bold;
+  color: var(--color-primary-700);
+}
+
+#game-board {
+  padding: 0;
+  list-style: none;
+  width: 15rem;
+  height: 15rem;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  gap: 0.5rem;
+}
+
+#game-board li {
+  background-color: var(--color-primary-300);
+  border-radius: 2px;
+  width: 100%;
+  height: 100%;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: var(--font-size-8);
+  font-weight: bold;
+  cursor: pointer;
+}
+
+#game-board li:hover {
+  background-color: var(--color-primary-400);
+}
+
+/* when we click on a cell to enter a symbol (X or O) we add with JS
+to the li element the class "disabled" to apply these styles */
+#game-board li.disabled {
+  background-color: var(--color-primary-400);
+  cursor: default;
+}
+
+#game-board li.game-over {
+  background-color: var(--color-primary-300);
+  cursor: default;
+}
+
+/* width >= 480px */
+@media (min-width: 480px) {
+  #game-board {
+    width: 20rem;
+    height: 20rem;
+  }
+}

@@ -1,0 +1,34 @@
+.form-control {
+  margin: 0.5rem 0;
+}
+
+.form-control label {
+  display: block;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+  font-weight: bold;
+  font-size: var(--font-size-3);
+}
+
+.form-control input {
+  outline: none;
+  font: inherit;
+  border: 1px solid var(--color-grey-100);
+  width: 10rem;
+  padding: 0.35rem;
+  text-align: center;
+  background-color: white;
+  font-size: var(--font-size-3);
+  color: var(--color-primary-600);
+}
+
+.form-error-message {
+  color: var(--color-error-message);
+}
+
+/* width >= 480px */
+@media (min-width: 480px) {
+    .form-control input {
+      width: 13rem;
+    }
+  }

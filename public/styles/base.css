@@ -1,0 +1,111 @@
+html {
+  --font-size-1: 1rem;
+  --font-size-2: 1.2rem;
+  --font-size-3: 1.4rem;
+  --font-size-4: 1.6rem;
+  --font-size-5: 1.8rem;
+  --font-size-6: 2rem;
+  --font-size-7: 2.3rem;
+  --font-size-8: 2.5rem;
+
+  --max-width-content: 70rem;
+
+  --color-primary-100: rgb(239, 249, 231);
+  --color-primary-200: rgb(223, 252, 223);
+  --color-primary-300: rgb(178, 222, 180);
+  --color-primary-400: rgb(60, 110, 61);
+  --color-primary-500: rgb(44, 104, 46);
+  --color-primary-600: rgb(31, 74, 33);
+  --color-primary-700: rgb(16, 50, 17);
+
+  --color-grey-100: rgb(204, 204, 204);
+  --color-grey-500: rgb(41, 44, 41);
+
+  --color-error-message: rgb(215, 99, 99);
+}
+
+body {
+  margin: 0;
+  font-family: "Open-Sans", sans-serif;
+  color: var(--color-grey-500);
+  background-color: var(--color-primary-100);
+}
+
+.side-backdrop {
+  position: fixed;
+  top: 0;
+  width: calc((100% - var(--max-width-content)) / 2);
+  height: 100%;
+  background-color: var(--color-primary-300);
+  display: none;
+}
+
+#backdrop-left {
+  left: 0;
+}
+
+#backdrop-right {
+  right: 0;
+}
+
+#main-header {
+  background-color: var(--color-primary-500);
+  color: white;
+  padding: 2rem 5%;
+  margin: 0 auto;
+  text-align: center;
+  box-sizing: border-box;
+  max-width: var(--max-width-content);
+}
+
+#main-header h1 {
+  font-size: var(--font-size-6);
+}
+
+#main-header p {
+  font-size: var(--font-size-2);
+}
+
+main {
+  box-sizing: border-box;
+  max-width: var(--max-width-content);
+  margin: 0 auto;
+}
+
+.btn {
+  font: inherit;
+  padding: 0.5rem 1.5rem;
+  background-color: var(--color-primary-500);
+  border: 1px solid var(--color-primary-500);
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: var(--font-size-2);
+}
+
+.btn:hover,
+.btn:active {
+  background-color: var(--color-primary-600);
+  border-color: var(--color-primary-600);
+}
+
+/* button alternative look (overwrites the base look above)  */
+.btn-alt {
+  background-color: white;
+  border-color: white;
+  color: var(--color-primary-600);
+}
+
+.btn-alt:hover,
+.btn-alt:active {
+  background-color: var(--color-primary-200);
+  border-color: transparent;
+}
+
+/* width >= 70rem */
+/* NOTE: min-width = var(--max-width-content)*/
+@media (min-width: 70rem) {
+  .side-backdrop {
+    display: block;
+  }
+}

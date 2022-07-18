@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include("includes/head") %>
+    <link rel="stylesheet" href="/styles/form.css" />
+    <link rel="stylesheet" href="/styles/configuration.css" />
+    <link rel="stylesheet" href="/styles/game.css" />
+    <script src="/scripts/ajax-script.js" defer></script>
+    <script src="/scripts/config-script.js" defer></script>
+    <script src="/scripts/game-script.js" defer></script>
+    <script src="/scripts/main-script.js" defer></script>
+  </head>
+  <body>
+    <%- include("includes/backdrop") %> 
+    <%- include("includes/header") %>
+    <main>
+      <%- include("includes/game-config") %> <%- include("includes/active-game")%>
+    </main>
+  </body>
+</html>
