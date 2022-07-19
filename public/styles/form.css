@@ -14,7 +14,7 @@
   outline: none;
   font: inherit;
   border: 1px solid var(--color-grey-100);
-  width: 10rem;
+  width: 80%;
   padding: 0.35rem;
   text-align: center;
   background-color: white;
@@ -28,7 +28,7 @@
 
 /* width >= 480px */
 @media (min-width: 480px) {
-    .form-control input {
-      width: 13rem;
-    }
+  .form-control input {
+    width: 70%;
   }
+}
