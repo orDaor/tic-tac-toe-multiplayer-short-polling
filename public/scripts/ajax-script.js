@@ -15,6 +15,7 @@ async function startNewGame(event) {
   const requestConfig = {
     method: "POST",
     headers: {
+      Accept: "application/json",
       "Content-Type": "application/json",
       "CSRF-Token": csrfTokenElement.content,
     },
