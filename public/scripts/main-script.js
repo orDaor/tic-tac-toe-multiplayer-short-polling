@@ -1,7 +1,12 @@
 //ACCESS DOM ELEMENT ---------------------------------------------------------
 
-//access form element
+//CSRF token
+const csrfTokenElement = document.querySelector('meta[name="csrf-token"]'); 
+
+//form
 const formElement = document.querySelector("#game-config form");
+
+//form error message
 const formErrorMessageElement = document.querySelector("#game-config .form-error-message");
 
 
@@ -10,5 +15,5 @@ const formErrorMessageElement = document.querySelector("#game-config .form-error
 
 //EVENT LISTENERS ---------------------------------------------------------
 
-//submit event listener
+//for submission
 formElement.addEventListener("submit", startNewGame);

@@ -8,7 +8,6 @@ async function startNewGame(event) {
   const playerData = {
     name: formData.get("playername"),
   };
-  console.log(playerData);
 
   //config ajax POST request to create a game session in the server for this client
   let response = {};
@@ -17,6 +16,7 @@ async function startNewGame(event) {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      "CSRF-Token": csrfTokenElement.content,
     },
     body: JSON.stringify(playerData),
   };
@@ -34,11 +34,11 @@ async function startNewGame(event) {
   const responseData = await response.json();
 
   //response with error code
-  if (!response.ok) {
+  if (!response.ok || responseData.inputNotValid) {
     displayFormErrorMessage(responseData.message);
     return;
   }
 
-  //operation was successful, 
+  //operation was successful,
   //TODO: update the DOM with the received data and let the client actually start the game
 }
