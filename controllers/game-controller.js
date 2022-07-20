@@ -7,7 +7,7 @@ const Room = require("../models/room-model");
 const GameStatus = require("../models/game-status-model");
 const GameMove = require("../models/game-move-model");
 const Player = require("../models/player-model");
-const validation = require("../utils/validation");
+const validation = require("../utils/validation-util");
 
 //main game page
 function getGame(req, res) {
