@@ -12,7 +12,6 @@ function errorHandlingMiddleware(error, req, res, next) {
 
   //check if the request forwarded here is an ajax request
   const acceptedResponseData = req.accepts(["html", "json"]);
-  console.log(acceptedResponseData);
 
   //if the request is ajax it wants json data as response,
   //otherwise it wants html data

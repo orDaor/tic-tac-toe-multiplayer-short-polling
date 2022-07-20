@@ -11,7 +11,7 @@ async function startNewGame(event) {
 
   //config ajax POST request to create a game session in the server for this client
   let response = {};
-  const url = `/game/new`;
+  const url = `/game/newgfdgfdgf`;
   const requestConfig = {
     method: "POST",
     headers: {
