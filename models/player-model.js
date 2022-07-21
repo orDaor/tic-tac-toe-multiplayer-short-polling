@@ -6,10 +6,9 @@
 const db = require("../data/database");
 
 class Player {
-  constructor(name, symbol, roomId, number) {
+  constructor(name, symbol, number) {
     this.name = name;
     this.symbol = symbol;
-    this.roomId = roomId;
     this.number = number;
   }
   //

@@ -5,10 +5,9 @@
 //imports custom
 
 class GameStatus {
-  constructor(board, lastMove, roomId) {
+  constructor(board, lastMove) {
     this.board = board;
     this.lastMove = lastMove;
-    this.roomId = roomId;
   }
 }
 
