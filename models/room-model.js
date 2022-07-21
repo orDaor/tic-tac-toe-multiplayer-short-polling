@@ -7,10 +7,10 @@ const db = require("../data/database");
 const ObjectId = require("mongodb").ObjectId;
 
 class Room {
-  constructor(players, gameStatus, avaiable, creationDate, blocked, roomId) {
+  constructor(players, gameStatus, creationDate, blocked, roomId) {
     this.players = players; //Array[1,2] of class Player
     this.gameStatus = gameStatus; //Object of class GameStatus
-    this.avaiable = avaiable;
+    this.available = this.isAvailable();
     this.creationDate = creationDate;
     this.blocked = blocked;
     if (roomId) {
@@ -27,7 +27,6 @@ class Room {
     return new Room(
       document.players,
       document.gameStatus,
-      document.avaiable,
       document.creationDate,
       document.blocked,
       document._id
@@ -67,6 +66,16 @@ class Room {
     return Room.fromMongoDBDocumentToRoom(document); //still returns undefined if no document is found
   }
 
+  //check if room is available (at leas 1 player slot is available)
+  isAvailable() {
+    //update room availability status
+    if (!this.getAvailablePlayerSlot()) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
   //save/update a game room in the DB: save a new one if not pointing to an existing room
   async save() {
     let result;
@@ -94,8 +103,21 @@ class Room {
   }
 
   //set one player data in players array: gets Player class parameter
-  setPlayer(player) {
+  addPlayer(player) {
+    //add a player in the room
     this.players[player.number - 1] = player;
+    //update room availability status
+    this.available = this.isAvailable();
+  }
+
+  //delete player data in a specific player slot
+  removePlayer(playerNumber) {
+    //delete player data
+    this.players[playerNumber - 1].name = "";
+    this.players[playerNumber - 1].symbol = "";
+    this.players[playerNumber - 1].number = 0;
+    //now room is available for another player to connect
+    this.available = true;
   }
 
   //set game status property
@@ -103,17 +125,59 @@ class Room {
     this.gameStatus = gameStatus;
   }
 
-  //check if in this room a player 1 slot is available
-  isPlayer1SlotAvailable() {}
+  //check if one player 1 or 2 is connected to the room
+  isPlayerSlotAvailable(playerNumber) {
+    //extract player data
+    const name = this.players[playerNumber - 1].name;
+    const symbol = this.players[playerNumber - 1].symbol;
+    const number = this.players[playerNumber - 1].number;
+    //player is connected if he has ALL non-empty data values
+    return !name && !symbol && !number;
+  }
 
-  //check if in this room a player 2 slot is available
-  isPlayer2SlotAvailable() {}
+  //check if in this room a player 1 or 2 slot is available, and return it.
+  //If both slots are available, return player 1 as default
+  getAvailablePlayerSlot() {
+    //check player slots availability
+    const isPlayer1SlotAvailable = this.isPlayerSlotAvailable(1);
+    const isPlayer2SlotAvailable = this.isPlayerSlotAvailable(2);
+    //
+    if (isPlayer1SlotAvailable && isPlayer2SlotAvailable) {
+      return 1;
+    } else if (isPlayer1SlotAvailable && !isPlayer2SlotAvailable) {
+      return 1;
+    } else if (!isPlayer1SlotAvailable && isPlayer2SlotAvailable) {
+      return 2;
+    } else {
+      return undefined;
+    }
+  }
 
-  //check if in this room any a player is already using the X symbol
-  isXSymbolAvailable() {}
-
-  //check if in this room any a player is already using the O symbol
-  isOSymbolAvailable() {}
+  //returnes the symbol not used by players in the room yet.
+  //If both symbols are available, return X as default
+  getAvailableGameSymbol() {
+    //extract player symbols
+    const player1Symbol = this.players[0].symbol;
+    const player2Symbol = this.players[1].symbol;
+    //find symbol not used yet (availabele)
+    if (!player1Symbol && !player2Symbol) {
+      return "X";
+    } else if (player1Symbol && !player2Symbol) {
+      if (player1Symbol === "X") {
+        return "O";
+      } else if (player1Symbol === "O") {
+        return "X";
+      }
+    } else if (!player1Symbol && player2Symbol) {
+      if (player2Symbol === "X") {
+        return "O";
+      } else if (player2Symbol === "O") {
+        return "X";
+      }
+    } else {
+      return undefined;
+    }
+  }
 
   //generate mongodb document from Room class obj
   fromRoomToMongoDBDocument() {
