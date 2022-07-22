@@ -5,14 +5,23 @@
 //imports custom
 const db = require("../data/database");
 const ObjectId = require("mongodb").ObjectId;
+const Player = require("../models/player-model");
+const GameStatus = require("../models/game-status-model");
 
 class Room {
   constructor(players, gameStatus, creationDate, blocked, roomId) {
     this.players = players; //Array[1,2] of class Player
     this.gameStatus = gameStatus; //Object of class GameStatus
     this.available = this.isAvailable();
-    this.creationDate = creationDate;
+
+    if (creationDate) {
+      this.creationDate = creationDate;
+    } else {
+      this.creationDate = new Date(); //now
+    }
+
     this.blocked = blocked;
+
     if (roomId) {
       this.roomId = roomId.toString();
     }
@@ -24,9 +33,19 @@ class Room {
       return undefined;
     }
 
+    //transform players of the document as Player class objects
+    const player1 = Player.fromMongoDBDocumentToPlayer(document.players[1]);
+    const player2 = Player.fromMongoDBDocumentToPlayer(document.players[2]);
+
+    //transform game status of the document as GameStatus class object
+    const gameStatus = GameStatus.fromMongoDBDocumentToGameStatus(
+      document.gameStatus
+    );
+
+    //create and return Room class object
     return new Room(
-      document.players,
-      document.gameStatus,
+      [player1, player2],
+      gameStatus,
       document.creationDate,
       document.blocked,
       document._id
@@ -36,7 +55,10 @@ class Room {
   //find the first available game room
   static async findAvailableAndBlock() {
     //define query filter
-    const query = { available: true };
+    const query = {
+      available: true,
+      bloked: false,
+    };
 
     //value to update in the room document
     const update = { $set: { blocked: true } };
