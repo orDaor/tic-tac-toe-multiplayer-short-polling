@@ -6,14 +6,14 @@
 
 function getWinnerCases() {
   return [
-    [0, 1, 2], // case 1
-    [2, 5, 8], // case 2
-    [8, 7, 6], // case 3
-    [6, 3, 0], // case 4
-    [1, 4, 7], // case 5
-    [3, 4, 5], // case 6
-    [2, 4, 6], // case 7
-    [0, 4, 8], // case 8
+    [0, 1, 2], // case 0
+    [2, 5, 8], // case 1
+    [8, 7, 6], // case 2
+    [6, 3, 0], // case 3
+    [1, 4, 7], // case 4
+    [3, 4, 5], // case 5
+    [2, 4, 6], // case 6
+    [0, 4, 8], // case 7
   ];
 }
 

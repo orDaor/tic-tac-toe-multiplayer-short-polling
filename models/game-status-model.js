@@ -4,11 +4,12 @@
 
 //imports custom
 const GameMove = require("../models/game-move-model");
+const GameOverStatus = require("../models/game-over-status-model");
 const gameUtil = require("../utils/game-util");
 
 class GameStatus {
   constructor(board, lastMove) {
-    this.board = board; //[ row ][ col ] matrix of values 1 and 2 (each value represents the player number who did the move)
+    this.board = board; //[ row ][ col ] matrix of values of 1 and 2 (each value represents the player number who did the move, 0 = no move)
     this.lastMove = lastMove; //object of class GameMove
   }
   //generate GameStatus Class object from mongodb document
@@ -39,16 +40,31 @@ class GameStatus {
 
   //check if the game is over and whether there is a winner or a draw
   getGameOverStatus() {
-    //init game over status
-    const gameOverStatus = {
-      isOver: false,
-      isWinner: false,
+    //check for a winner
+    const winnerCases = gameUtil.getWinnerCases();
+    for (let i = 0; i < winnerCases.length; i++) {
+      if (gameUtil.isWinnerCaseOccured(this.board, winnerCases[i])) {
+        return new GameOverStatus(true, true, i, this.lastMove.playerNumber);
+      }
     }
 
-    //
+    //check for a draw
+    //compute rows and columns number
+    const rowsNumber = this.board.length;
+    const columnsNumber = this.board[0].length;
 
-    //return computed game over status
-    return gameOverStatus;
+    //check if there is at least 1 empty cell to exclude draw case as well
+    for (let i = 0; i < rowsNumber; i++) {
+      for (let j = 0; j < columnsNumber; j++) {
+        if (!this.board[i][j]) {
+          //NO draw occured
+          return new GameOverStatus(false);
+        }
+      }
+    }
+
+    //a draw occured
+    return new GameOverStatus(true);
   }
 }
 
