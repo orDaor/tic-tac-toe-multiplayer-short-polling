@@ -3,6 +3,7 @@
 //inports 3rd party
 
 //imports custom
+const GameMove = require("../models/game-move-model");
 const gameUtil = require("../utils/game-util");
 
 class GameStatus {
@@ -16,8 +17,12 @@ class GameStatus {
     if (!document) {
       return undefined;
     }
+
+    //transform last move of the document in GameMove class object
+    const lastMove = GameMove.fromMongoDBDocumentToGameMove(document.lastMove);
+
     //create and return GameStatus class object
-    return new GameStatus(document.board, document.lastMove);
+    return new GameStatus(document.board, lastMove);
   }
 
   //which player's turn is it?
