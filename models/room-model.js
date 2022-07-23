@@ -57,7 +57,7 @@ class Room {
     //define query filter
     const query = {
       available: true,
-      bloked: false,
+      blocked: false,
     };
 
     //value to update in the room document
