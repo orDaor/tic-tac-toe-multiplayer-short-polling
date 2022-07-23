@@ -8,7 +8,11 @@ class GameMove {
   constructor(playerNumber, coord, date) {
     this.playerNumber = playerNumber;
     this.coord = coord; //[row, col] array
-    this.date = date;
+    if (date) {
+      this.date = date;
+    } else {
+      this.date = new Date();
+    }
   }
 
   //generate GameMove class object from mongodb document
