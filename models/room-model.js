@@ -4,8 +4,10 @@
 
 //imports custom
 const db = require("../data/database");
+const gameUtil = require("../utils/game-util");
 const ObjectId = require("mongodb").ObjectId;
 const Player = require("../models/player-model");
+const GameMove = require("../models/game-move-model");
 const GameStatus = require("../models/game-status-model");
 
 class Room {
@@ -26,6 +28,26 @@ class Room {
       this.roomId = roomId.toString();
     }
   }
+
+  //create a new Room object, initialized for a player requesting a new game session
+  //(this is used in case no available room in the DB was found
+  static createNew(playerName) {
+    //init the values of the new room
+    const emptyBoard = gameUtil.getEmptyBoard();
+    const emptyGameMove = new GameMove(0, [null, null], "null");
+    const gameStatus = new GameStatus(emptyBoard, emptyGameMove);
+    const player1 = new Player(playerName, "X", 1);
+    const player2 = new Player("", "", 0);
+    //create and return the new room
+    return new Room(
+      [player1, player2],
+      gameStatus,
+      null, //date = now
+      false //not blocked
+      //no room id
+    );
+  }
+
   //generate Room class obj from mongodb document
   static fromMongoDBDocumentToRoom(document) {
     //if no document return undefined
@@ -142,11 +164,6 @@ class Room {
     this.available = true;
   }
 
-  //set game status property
-  setGameStatus(gameStatus) {
-    this.gameStatus = gameStatus;
-  }
-
   //check if one player 1 or 2 is connected to the room
   isPlayerSlotAvailable(playerNumber) {
     //extract player data
@@ -215,3 +232,5 @@ class Room {
 
 //export
 module.exports = Room;
+
+

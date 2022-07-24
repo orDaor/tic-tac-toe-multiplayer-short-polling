@@ -4,6 +4,14 @@
 
 //imports custom
 
+function getEmptyBoard() {
+  return [
+    [0, 0, 0],
+    [0, 0, 0],
+    [0, 0, 0],
+  ];
+}
+
 function getWinnerCases() {
   return [
     [0, 1, 2], // case 0
@@ -101,6 +109,7 @@ function isWinnerCaseOccured(matrix, winnerCase) {
 
 //export
 module.exports = {
+  getEmptyBoard: getEmptyBoard,
   getWinnerCases: getWinnerCases,
   fromMatrixCoordToArrayCoord: fromMatrixCoordToArrayCoord,
   fromArrayCoordToMatrixCoord: fromArrayCoordToMatrixCoord,

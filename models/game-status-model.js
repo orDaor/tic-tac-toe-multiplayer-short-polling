@@ -26,6 +26,16 @@ class GameStatus {
     return new GameStatus(document.board, lastMove);
   }
 
+  //make a game move
+  makeMove(playernumber, coord) {
+    //update matrix board
+    const row = coord[0];
+    const col = coord[1];
+    this.board[row][col] = playernumber;
+    //update lastMove (by using GameMove constructor?)
+    this.lastMove = new GameMove(playernumber, coord);
+  }
+
   //which player's turn is it?
   getCurrentTurnPlayerNumber() {
     const lastMovePlayerNumber = this.lastMove.playernumber;
