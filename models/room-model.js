@@ -31,12 +31,12 @@ class Room {
 
   //create a new Room object, initialized for a player requesting a new game session
   //(this is used in case no available room in the DB was found
-  static createNew(playerName) {
+  static createEmpty() {
     //init the values of the new room
     const emptyBoard = gameUtil.getEmptyBoard();
     const emptyGameMove = new GameMove(0, [null, null], "null");
     const gameStatus = new GameStatus(emptyBoard, emptyGameMove);
-    const player1 = new Player(playerName, "X", 1);
+    const player1 = new Player("", "", 0);
     const player2 = new Player("", "", 0);
     //create and return the new room
     return new Room(
@@ -95,7 +95,7 @@ class Room {
       .findOneAndUpdate(query, update, options);
 
     //return Room class obj
-    return Room.fromMongoDBDocumentToRoom(document); //still returns undefined if no document is found
+    return Room.fromMongoDBDocumentToRoom(document.value); //still returns undefined if no document is found
   }
 
   //find a room by its id
