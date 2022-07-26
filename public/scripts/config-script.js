@@ -4,3 +4,11 @@ function displayFormErrorMessage(errorMessage) {
   formErrorMessageElement.querySelector("p").textContent = errorMessage;
   return;
 }
+
+function hideGameConfigSection() {
+  gameConfigSectionElement.style.display = "none";
+}
+
+function displayActiveGameSection() {
+  activeGameSectionElement.style.display = "block";
+}

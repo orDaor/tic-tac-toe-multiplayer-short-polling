@@ -22,6 +22,8 @@ html {
   --color-grey-500: rgb(41, 44, 41);
 
   --color-error-message: rgb(244, 158, 158);
+
+  --active-game-section-vertical-margin: 2rem;
 }
 
 body {
@@ -51,7 +53,7 @@ body {
 #main-header {
   background-color: var(--color-primary-500);
   color: white;
-  padding: 2rem 5%;
+  padding: 0.8rem 5%;
   margin: 0 auto;
   text-align: center;
   box-sizing: border-box;
@@ -59,7 +61,7 @@ body {
 }
 
 #main-header h1 {
-  font-size: var(--font-size-6);
+  font-size: var(--font-size-4);
 }
 
 #main-header p {
@@ -107,5 +109,16 @@ main {
 @media (min-width: 70rem) {
   .side-backdrop {
     display: block;
+  }
+}
+
+@media (min-width: 480px) {
+  #main-header {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+  }
+
+  #main-header h1 {
+    font-size: var(--font-size-7);
   }
 }

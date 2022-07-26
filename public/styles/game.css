@@ -1,33 +1,44 @@
 #active-game {
   text-align: center;
-  margin: 2rem 0 5rem 0;
+  margin: 3rem auto 5rem auto;
   display: none;
 }
 
 #game-over {
   width: 90%;
   max-width: 48rem;
-  margin: 1rem auto;
-  padding: 2rem 2rem;
+  margin: 0 auto var(--active-game-section-vertical-margin) auto;
+  padding: 1rem;
   box-sizing: border-box;
   background-color: var(--color-primary-700);
   color: white;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
   border-radius: 4px;
+  display: none;
 }
 
 #game-over h2 {
-  font-size: var(--font-size-7);
+  font-size: var(--font-size-4);
   margin: 0.5rem 0;
 }
 
-#game-turn {
+#players-info {
+  margin: var(--active-game-section-vertical-margin) auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  justify-content: center;
   font-size: var(--font-size-3);
+  color: var(--color-grey-500);
 }
 
-#active-player-name {
-  font-weight: bold;
+#players-info .player-name {
   color: var(--color-primary-700);
+  font-weight: bold;
+}
+
+#players-info p {
+  margin: 0;
 }
 
 #game-board {
@@ -35,7 +46,7 @@
   list-style: none;
   width: 15rem;
   height: 15rem;
-  margin: 0 auto;
+  margin: var(--active-game-section-vertical-margin) auto;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-template-rows: repeat(3, 1fr);
@@ -72,10 +83,42 @@ to the li element the class "disabled" to apply these styles */
   cursor: default;
 }
 
+#game-turn {
+  margin: var(--active-game-section-vertical-margin) auto 0 auto;
+  font-size: var(--font-size-3);
+}
+
+#game-turn p {
+  margin: 0;
+}
+
+#active-player-name {
+  font-weight: bold;
+  color: var(--color-primary-700);
+}
+
 /* width >= 480px */
 @media (min-width: 480px) {
+
+  #game-over {
+    padding: 2rem;
+  }
+
+  #active-game {
+    margin-top: 5rem;
+  }
+
   #game-board {
     width: 20rem;
     height: 20rem;
+  }
+
+  #players-info {
+    flex-direction: row;
+    gap: 2rem;
+  }
+
+  #game-over h2 {
+    font-size: var(--font-size-7);
   }
 }

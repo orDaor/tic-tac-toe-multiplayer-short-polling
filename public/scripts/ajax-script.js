@@ -40,6 +40,9 @@ async function startNewGame(event) {
     return;
   }
 
-  //operation was successful,
-  //TODO: update the DOM with the received data and let the client actually start the game
+  //operation was successful, display gameboard and correct game info
+  hideGameConfigSection();
+  displayActiveGameSection();
+
+  
 }

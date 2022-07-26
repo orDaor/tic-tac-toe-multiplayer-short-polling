@@ -3,9 +3,11 @@
     <h2><span id="winner-name">PLAYER NAME</span> won!</h2>
     <button class="btn">Start New Game</button>
   </article>
-  <p id="game-turn">
-    It's <span id="active-player-name">PLAYER NAME</span>'s turn!
-  </p>
+  <div id="players-info">
+    <p class="player-name">Plyer 1 name</p>
+    <p>vs</p>
+    <p class="player-name">Player 2 name</p>
+  </div>
   <ol id="game-board">
     <li data-row="1" data-col="1"></li>
     <li data-row="1" data-col="2"></li>
@@ -19,4 +21,7 @@
     <li data-row="3" data-col="2"></li>
     <li data-row="3" data-col="3"></li>
   </ol>
+  <div id="game-turn">
+    <p>It's <span id="active-player-name">PLAYER NAME</span>'s turn!</p>
+  </div>
 </section>

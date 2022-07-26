@@ -87,6 +87,7 @@ async function createGameSession(req, res, next) {
     responseData.players = newRoom.players;
     responseData.gameStatus = newRoom.gameStatus;
     responseData.playerNumber = playerNumber;
+    responseData.yourTurn = true;
     res.json(responseData);
     return;
   }
@@ -122,6 +123,7 @@ async function createGameSession(req, res, next) {
   responseData.players = availableRoom.players;
   responseData.gameStatus = availableRoom.gameStatus;
   responseData.playerNumber = playerNumber;
+  responseData.yourTurn = false;
   res.json(responseData);
   return;
 }

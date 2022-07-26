@@ -44,7 +44,7 @@ class GameStatus {
     } else if (lastMovePlayerNumber === 2) {
       return 1;
     } else {
-      return undefined;
+      return 1;
     }
   }
 
