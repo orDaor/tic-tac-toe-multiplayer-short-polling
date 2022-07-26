@@ -67,18 +67,17 @@
   cursor: pointer;
 }
 
-#game-board li:hover {
+#game-board li:hover,
+#game-board li:active {
   background-color: var(--color-primary-400);
 }
 
-/* when we click on a cell to enter a symbol (X or O) we add with JS
-to the li element the class "disabled" to apply these styles */
-#game-board li.disabled {
+#game-board li.selected {
   background-color: var(--color-primary-400);
   cursor: default;
 }
 
-#game-board li.game-over {
+#game-board li.not-selectable {
   background-color: var(--color-primary-300);
   cursor: default;
 }
@@ -99,7 +98,6 @@ to the li element the class "disabled" to apply these styles */
 
 /* width >= 480px */
 @media (min-width: 480px) {
-
   #game-over {
     padding: 2rem;
   }
