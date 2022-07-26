@@ -43,6 +43,9 @@ async function createGameSession(req, res, next) {
 
   //look for an existing available game room
   let availableRoom;
+  let playerNumber;
+  let symbol;
+  let player;
   try {
     availableRoom = await Room.findAvailableAndBlock();
   } catch (error) {
@@ -55,11 +58,11 @@ async function createGameSession(req, res, next) {
     const newRoom = Room.createEmpty();
 
     //find a player number and symbol for the client
-    const playerNumber = newRoom.getAvailablePlayerSlot(); //default = 1 in an empty room
-    const symbol = newRoom.getAvailableGameSymbol(); //default = X in an empty room
+    playerNumber = newRoom.getAvailablePlayerSlot(); //default = 1 in an empty room
+    symbol = newRoom.getAvailableGameSymbol(); //default = X in an empty room
 
     //create a player with the user input data and save it inside the room
-    const player = new Player(req.body.name, symbol, playerNumber);
+    player = new Player(req.body.name, symbol, playerNumber);
     newRoom.addPlayer(player);
 
     //save the new created room in the DB
@@ -74,12 +77,11 @@ async function createGameSession(req, res, next) {
     //update room object
     newRoom.roomId = newRoomId.toString();
 
-    //map the client to the save room with the chosen playern number by its session
-    const gameSessionData = {
+    //map the client to the saved room by its session
+    sessionUtil.saveGameSession(req, {
       roomId: newRoomId.toString(),
       playerNumber: playerNumber,
-    };
-    sessionUtil.saveGameSession(req, gameSessionData);
+    });
 
     //set and send response data
     responseData.players = newRoom.players;
@@ -91,6 +93,37 @@ async function createGameSession(req, res, next) {
 
   //if an available room was found, connect the client to that room
   //with a player number 1 or 2
+  playerNumber = availableRoom.getAvailablePlayerSlot();
+  symbol = availableRoom.getAvailableGameSymbol();
+
+  //create a player with the user input data and save it inside the room
+  player = new Player(req.body.name, symbol, playerNumber);
+  availableRoom.addPlayer(player);
+
+  //un-block the room
+  availableRoom.blocked = false;
+
+  //update the room in the DB with the new values
+  try {
+    await availableRoom.save();
+  } catch (error) {
+    next(error);
+    return;
+  }
+
+  //the room was update successfully in the DB...
+  //map the client to the saved room by its session
+  sessionUtil.saveGameSession(req, {
+    roomId: availableRoom.roomId,
+    playerNumber: playerNumber,
+  });
+
+  //set and send response data
+  responseData.players = availableRoom.players;
+  responseData.gameStatus = availableRoom.gameStatus;
+  responseData.playerNumber = playerNumber;
+  res.json(responseData);
+  return;
 }
 
 //export

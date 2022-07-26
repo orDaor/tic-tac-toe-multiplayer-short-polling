@@ -56,8 +56,8 @@ class Room {
     }
 
     //transform players of the document as Player class objects
-    const player1 = Player.fromMongoDBDocumentToPlayer(document.players[1]);
-    const player2 = Player.fromMongoDBDocumentToPlayer(document.players[2]);
+    const player1 = Player.fromMongoDBDocumentToPlayer(document.players[0]);
+    const player2 = Player.fromMongoDBDocumentToPlayer(document.players[1]);
 
     //transform game status of the document as GameStatus class object
     const gameStatus = GameStatus.fromMongoDBDocumentToGameStatus(
