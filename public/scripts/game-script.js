@@ -1,9 +1,12 @@
 //player 1 name is displayed on the left, player 2 name on right
-function setPlayerName(playerNumber, playerName) {
-  if (playerNumber === 1 && playerName) {
-    playerNameElement1.textContent = playerName;
-  } else if (playerNumber === 2 && playerName) {
-    playerNameElement2.textContent = playerName;
+function setPlayersData(players) {
+  const player1Name = players[0].name;
+  const player2Name = players[1].name;
+  if (player1Name) {
+    playerNameElement1.textContent = player1Name;
+  }
+  if (player2Name) {
+    playerNameElement2.textContent = player2Name;
   }
 }
 

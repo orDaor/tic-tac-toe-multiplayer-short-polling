@@ -45,10 +45,7 @@ async function startNewGame(event) {
   displayActiveGameSection();
 
   //display players names of the room found for the client
-  const player1Name = responseData.players[0].name;
-  const player2Name = responseData.players[1].name;
-  setPlayerName(1, player1Name);
-  setPlayerName(2, player2Name);
+  setPlayersData(responseData.players);
 
   //decide whether the client can start selecting cells depending on which player number
   //the server assigned him in the assiged room
