@@ -22,6 +22,9 @@ const playerNameElement2 = document.getElementById("player2");
 //game board cells
 const gameBoardLiElements = document.querySelectorAll("#game-board li");
 
+//name of the player who has his turn
+const activePlayerName = document.getElementById("active-player-name");
+
 //EVENT LISTENERS ---------------------------------------------------------
 
 //for submission
