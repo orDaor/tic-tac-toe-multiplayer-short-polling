@@ -87,13 +87,17 @@ async function createGameSession(req, res, next) {
     responseData.players = newRoom.players;
     responseData.gameStatus = newRoom.gameStatus;
     responseData.playerNumber = playerNumber;
-    responseData.yourTurn = true;
+    responseData.isYourTurn = true;
     res.json(responseData);
     return;
   }
 
-  //if an available room was found, connect the client to that room
-  //with a player number 1 or 2
+  //check if both player slots are availabe in the room found
+  const areBothPlayerStolsAvailable =
+    availableRoom.isPlayerSlotAvailable(1) &&
+    availableRoom.isPlayerSlotAvailable(2);
+
+  //connect the client to the room room with an available player stol (player number) 1 or 2
   playerNumber = availableRoom.getAvailablePlayerSlot();
   symbol = availableRoom.getAvailableGameSymbol();
 
@@ -123,7 +127,20 @@ async function createGameSession(req, res, next) {
   responseData.players = availableRoom.players;
   responseData.gameStatus = availableRoom.gameStatus;
   responseData.playerNumber = playerNumber;
-  responseData.yourTurn = false;
+
+  if (areBothPlayerStolsAvailable) {
+    responseData.isYourTurn = true;
+  } else {
+    //only one player slot was free in the available room found
+    if (availableRoom.gameStatus.getCurrentTurn()) {
+      //the player waiting in the room did already his move
+      responseData.isYourTurn = true;
+    } else {
+      //the player waiting in the room did not dio his move yet
+      responseData.isYourTurn = false;
+    }
+  }
+
   res.json(responseData);
   return;
 }

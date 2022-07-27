@@ -37,14 +37,14 @@ class GameStatus {
   }
 
   //which player's turn is it?
-  getCurrentTurnPlayerNumber() {
+  getCurrentTurn() {
     const lastMovePlayerNumber = this.lastMove.playernumber;
     if (lastMovePlayerNumber === 1) {
       return 2;
     } else if (lastMovePlayerNumber === 2) {
       return 1;
     } else {
-      return 1;
+      return undefined;
     }
   }
 
