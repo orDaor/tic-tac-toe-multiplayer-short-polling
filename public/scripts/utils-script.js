@@ -61,7 +61,7 @@ async function sendPeriodicRequest(config) {
     //Instead a custom error message is displayed because of a technical problem.
     let errorMessage;
     if (error.code) {
-      errorMessage = "There was an error in the server";
+      errorMessage = "An error occured in the server";
     } else {
       errorMessage = "We are expiriencing some connection problems";
     }

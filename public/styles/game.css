@@ -41,6 +41,21 @@
   margin: 0;
 }
 
+.game-error-message {
+  margin: var(--active-game-section-vertical-margin) auto;
+  display: none;
+}
+
+.game-error-message p {
+  padding: 0.5rem;
+  margin: 0;
+  width: 80%;
+  background-color: var(--color-error-message);
+  font-size: var(--font-size-2);
+  border-radius: 4px;
+  display: inline-block;
+}
+
 #game-board {
   padding: 0;
   list-style: none;
@@ -106,6 +121,10 @@
     margin-top: 5rem;
   }
 
+  .game-error-message p {
+    width: 60%;
+  }
+
   #game-board {
     width: 20rem;
     height: 20rem;
@@ -118,5 +137,12 @@
 
   #game-over h2 {
     font-size: var(--font-size-7);
+  }
+}
+
+/* width >= 768px */
+@media (min-width: 768px) {
+  .game-error-message p{
+    width: 40%;
   }
 }
