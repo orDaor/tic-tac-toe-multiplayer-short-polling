@@ -67,3 +67,16 @@ function setActivePlayerName(yourTurn, players, playerNumber) {
     }
   }
 }
+
+//show error message in the active game area
+function displayGameErrorMessage(errorMessage) {
+  gameErrorMessageElement.style.display = "block";
+  gameErrorMessageElement.querySelector("p").textContent = errorMessage;
+  return;
+}
+
+//hide error message in the active game area
+function displayGameErrorMessage() {
+  gameErrorMessageElement.style.display = "none";
+  return;
+}

@@ -22,6 +22,9 @@ const playerNameElement2 = document.getElementById("player2");
 //game board cells
 const gameBoardLiElements = document.querySelectorAll("#game-board li");
 
+//game error message
+const gameErrorMessageElement = document.querySelector("#active-game .game-error-message");
+
 //name of the player who has his turn
 const activePlayerName = document.getElementById("active-player-name");
 
