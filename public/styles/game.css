@@ -43,14 +43,16 @@
 
 .game-error-message {
   margin: var(--active-game-section-vertical-margin) auto;
-  display: block;
+  display: none;
 }
 
 .game-error-message p {
   box-sizing: border-box;
   display: flex;
   flex-direction: row;
-  padding: 0.5rem;
+  justify-content: center;
+  gap: 2rem;
+  padding: 1.2rem;
   margin: 0 auto;
   width: 80%;
   background-color: var(--color-error-message);
@@ -60,13 +62,12 @@
 }
 
 .game-error-message span {
-  margin: 0 auto;
+  margin: 0;
   text-align: left;
 }
 
 .game-error-message button {
-  margin-right: 0.2rem;
-  margin-left: 1rem;
+  margin: 0;
   padding: 0;
   border: none;
   color: var(--color-primary-100);
@@ -80,6 +81,7 @@
 }
 
 #game-board {
+  box-sizing: border-box;
   padding: 0;
   list-style: none;
   width: 15rem;
@@ -145,11 +147,9 @@
   }
 
   .game-error-message p {
-    width: 70%;
-  }
-
-  .game-error-message p {
     font-size: var(--font-size-1);
+    width: 60%;
+    gap: 3rem;
   }
 
   #game-board {
@@ -159,7 +159,6 @@
 
   #players-info {
     flex-direction: row;
-    gap: 2rem;
   }
 
   #game-over h2 {
