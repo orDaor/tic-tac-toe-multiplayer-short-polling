@@ -76,7 +76,7 @@ function displayGameErrorMessage(errorMessage) {
 }
 
 //hide error message in the active game area
-function displayGameErrorMessage() {
+function hideGameErrorMessage() {
   gameErrorMessageElement.style.display = "none";
   return;
 }
