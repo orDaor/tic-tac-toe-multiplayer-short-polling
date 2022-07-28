@@ -29,3 +29,6 @@ const activePlayerName = document.getElementById("active-player-name");
 
 //for submission
 formElement.addEventListener("submit", startNewGame);
+
+//DEBUGGING 
+//...
