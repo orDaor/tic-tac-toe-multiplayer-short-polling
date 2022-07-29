@@ -46,5 +46,8 @@ const getOnePlayerDataConfig = new PeriodicRequestConfig(
 //for submission
 formElement.addEventListener("submit", startNewGame);
 
+//hide game error message by clicking on the "X" button
+gameErrorMessageElement.querySelector("button").addEventListener("click", hideGameErrorMessage);
+
 //DEBUGGING  ---------------------------------------------------------
 //...
