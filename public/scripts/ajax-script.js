@@ -41,27 +41,6 @@ async function startNewGame(event) {
     return;
   }
 
-  //TODO: encapsulate the code below in a new function "initGame(responseData)"
-
-  //operation was successful, display gameboard and correct game info
-  hideGameConfigSection();
-  displayActiveGameSection();
-
-  //set the player names using server response data
-  setPlayersData(responseData.players);
-
-  //update the game status using server response data
-  setGameBoardData(responseData.players, responseData.gameStatus);
-
-  //decide whether the client can start playing depending on whether it is its turn or not
-  if (responseData.isYourTurn) {
-    setActivePlayerName(true);
-    makeCellsSelectable();
-    //start periodic fetch of other player data...
-  } else {
-    const otherPlayerNumber = getOtherPlayerNumber(responseData.playerNumber);
-    setActivePlayerName(false, responseData.players, otherPlayerNumber);
-    makeCellsNotSelectable();
-    //start  periodic fetch of the game status...
-  }
+  //initialize game with connected game room data
+  initGame(responseData);
 }
