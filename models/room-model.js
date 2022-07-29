@@ -106,6 +106,11 @@ class Room {
     //run query
     const document = await db.getDb().collection("rooms").findOne(query);
 
+    //no room found
+    if (!document) {
+      throw new Error("No room found");
+    }
+
     //return Room class obj
     return Room.fromMongoDBDocumentToRoom(document); //still returns undefined if no document is found
   }

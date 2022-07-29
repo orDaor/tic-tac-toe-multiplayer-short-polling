@@ -107,6 +107,15 @@ function isWinnerCaseOccured(matrix, winnerCase) {
   );
 }
 
+//find the number of the other player the client is playing against
+function getOtherPlayerNumber(thisPlayerNumber) {
+  if (thisPlayerNumber === 1) {
+    return 2;
+  } else if (thisPlayerNumber === 2) {
+    return 1;
+  }
+}
+
 //export
 module.exports = {
   getEmptyBoard: getEmptyBoard,
@@ -114,4 +123,5 @@ module.exports = {
   fromMatrixCoordToArrayCoord: fromMatrixCoordToArrayCoord,
   fromArrayCoordToMatrixCoord: fromArrayCoordToMatrixCoord,
   isWinnerCaseOccured: isWinnerCaseOccured,
+  getOtherPlayerNumber: getOtherPlayerNumber,
 };

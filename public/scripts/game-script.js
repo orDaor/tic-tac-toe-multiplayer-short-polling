@@ -11,12 +11,19 @@ function initGame(responseData) {
   setGameBoardData(responseData.players, responseData.gameStatus);
 
   //decide whether the client can start playing depending on whether it is its turn or not
+  const otherPlayerNumber = getOtherPlayerNumber(responseData.playerNumber);
   if (responseData.isYourTurn) {
     setActivePlayerName(true);
     makeCellsSelectable();
-    //start periodic fetch of other player data...
+    //start periodic fetch of other player data
+    const isOtherPlayerConnected = isPlayerConnected(
+      responseData.players,
+      otherPlayerNumber
+    );
+    if (!isOtherPlayerConnected) {
+      sendPeriodicRequest(getOnePlayerDataConfig);
+    }
   } else {
-    const otherPlayerNumber = getOtherPlayerNumber(responseData.playerNumber);
     setActivePlayerName(false, responseData.players, otherPlayerNumber);
     makeCellsNotSelectable();
     //start  periodic fetch of the game status...
@@ -47,6 +54,15 @@ function setPlayersData(players) {
     playerNameElement2.textContent = players[1].name;
   } else {
     playerNameElement2.textContent = defaultPlayerName;
+  }
+}
+
+//set othe player data
+function setOnePlayerData(player) {
+  if (player.number === 1) {
+    playerNameElement1.textContent = player.name;
+  } else if (player.number === 2) {
+    playerNameElement2.textContent = player.name;
   }
 }
 
@@ -113,7 +129,7 @@ function setActivePlayerName(yourTurn, players, activePlayerNumber) {
 //show error message in the active game area
 function displayGameErrorMessage(errorMessage) {
   gameErrorMessageElement.style.display = "block";
-  gameErrorMessageElement.querySelector("p").textContent = errorMessage;
+  gameErrorMessageElement.querySelector("p span").textContent = errorMessage;
   return;
 }
 

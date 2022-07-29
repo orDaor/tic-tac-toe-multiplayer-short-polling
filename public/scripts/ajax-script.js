@@ -33,7 +33,6 @@ async function startNewGame(event) {
 
   //parse response data
   const responseData = await response.json();
-  console.log(responseData);
 
   //response with error code
   if (!response.ok || responseData.inputNotValid) {
@@ -43,4 +42,24 @@ async function startNewGame(event) {
 
   //initialize game with connected game room data
   initGame(responseData);
+}
+
+//send request to fetch other player data
+async function getOnePlayerData() {
+  const url = "/player/other";
+  const requestConfig = {
+    headers: {
+      Accept: "application/json",
+    },
+  };
+  const response = await fetch(url, requestConfig);
+  //response with error code
+  if (!response.ok) {
+    const error = new Error("An error occured");
+    error.code = response.status;
+    throw error;
+  }
+  //response ok, check data
+  const responseData = await response.json();
+  return responseData.otherPlayer;
 }
