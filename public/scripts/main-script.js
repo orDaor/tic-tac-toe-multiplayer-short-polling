@@ -30,16 +30,29 @@ const gameErrorMessageElement = document.querySelector(
 );
 
 //name of the player who has his turn
-const activePlayerName = document.getElementById("active-player-name");
+const activePlayerNameElement = document.getElementById("active-player-name");
+
+//GLOBAL FLAGS---------------------------------------------------------
+let isMyTurnGlobal = false;
 
 //PERIODIC REQUEST CONFIG OBJECTS ---------------------------------------------------------
+//ask the server if another player connected to the room and fetch the data of that player in that case
 const getOnePlayerDataConfig = new PeriodicRequestConfig(
-  getOnePlayerData, //send
+  fetchOnePlayerData, //send
   2000, // delay [ms]
   false, //stop
   setOnePlayerData, //resolve
   displayGameErrorMessage //handeError
 );
+
+//ask the server if the other player made his move and fetch actual room status in that case
+const fetchRoomDataConfig = new PeriodicRequestConfig(
+    fetchRoomData, //send
+    2000, // delay [ms]
+    false, //stop
+    startYourTurn, //resolve
+    displayGameErrorMessage //handeError
+  );
 
 //EVENT LISTENERS ---------------------------------------------------------
 
@@ -47,7 +60,9 @@ const getOnePlayerDataConfig = new PeriodicRequestConfig(
 formElement.addEventListener("submit", startNewGame);
 
 //hide game error message by clicking on the "X" button
-gameErrorMessageElement.querySelector("button").addEventListener("click", hideGameErrorMessage);
+gameErrorMessageElement
+  .querySelector("button")
+  .addEventListener("click", hideGameErrorMessage);
 
 //DEBUGGING  ---------------------------------------------------------
 //...

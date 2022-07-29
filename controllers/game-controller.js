@@ -145,8 +145,41 @@ async function createGameSession(req, res, next) {
   return;
 }
 
+//get actual game status data
+async function getRoomData(req, res, next) {
+  //init response data
+  let responseData = {};
+
+  //fetch game session fata
+  const roomId = req.session.gameData.roomId;
+  const playerNumber = req.session.gameData.playerNumber;
+
+  //fetch room from the DB where client is playing
+  let room;
+  try {
+    room = await Room.findById(roomId);
+  } catch (error) {
+    next(error);
+    return;
+  }
+
+  //check whether the turn is of the player who sent the request
+  const isYourTurn = room.gameStatus.getCurrentTurn() === playerNumber;
+
+  //set and send response data
+  if (isYourTurn) {
+    responseData.room = {};
+    responseData.room.players = room.players;
+    responseData.room = room.gameStatus;
+  } else {
+    responseData.room = null;
+  }
+  res.json(responseData);
+}
+
 //export
 module.exports = {
   getGame: getGame,
   createGameSession: createGameSession,
+  getRoomData: getRoomData,
 };

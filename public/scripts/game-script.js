@@ -13,7 +13,8 @@ function initGame(responseData) {
   //decide whether the client can start playing depending on whether it is its turn or not
   const otherPlayerNumber = getOtherPlayerNumber(responseData.playerNumber);
   if (responseData.isYourTurn) {
-    setActivePlayerName(true);
+    isMyTurnGlobal = true;
+    setActivePlayerName(isMyTurnGlobal);
     makeCellsSelectable();
     //start periodic fetch of other player data
     const isOtherPlayerConnected = isPlayerConnected(
@@ -24,9 +25,16 @@ function initGame(responseData) {
       sendPeriodicRequest(getOnePlayerDataConfig);
     }
   } else {
-    setActivePlayerName(false, responseData.players, otherPlayerNumber);
+    isMyTurnGlobal = false;
+    setActivePlayerName(
+      isMyTurnGlobal,
+      responseData.players,
+      otherPlayerNumber
+    );
     makeCellsNotSelectable();
-    //start  periodic fetch of the game status...
+    //start  periodic fetch of the game status
+    //(server checks if it is clients turn, in that case returns updated game status)
+    sendPeriodicRequest(fetchRoomDataConfig);
   }
 }
 
@@ -104,6 +112,13 @@ function setGameBoardData(players, gameStatus) {
   }
 }
 
+function startYourTurn(updatedRoom) {
+  isMyTurnGlobal = true;
+  setActivePlayerName(isMyTurnGlobal);
+  setGameBoardData(updatedRoom.players, updatedRoom.gameStatus);
+  makeCellsSelectable();
+}
+
 //find the number of the player this client is playing with
 function getOtherPlayerNumber(thisPlayerNumber) {
   if (thisPlayerNumber === 1) {
@@ -114,14 +129,14 @@ function getOtherPlayerNumber(thisPlayerNumber) {
 }
 
 //set the name of the player who has its turn
-function setActivePlayerName(yourTurn, players, activePlayerNumber) {
-  if (yourTurn) {
-    activePlayerName.textContent = "YOUR";
-    activePlayerName.nextElementSibling.textContent = "";
+function setActivePlayerName(isMyTurn, players, activePlayerNumber) {
+  if (isMyTurn) {
+    activePlayerNameElement.textContent = "YOUR";
+    activePlayerNameElement.nextElementSibling.textContent = "";
   } else {
     const playerName = players[activePlayerNumber - 1].name;
     if (playerName) {
-      activePlayerName.textContent = playerName;
+      activePlayerNameElement.textContent = playerName;
     }
   }
 }
