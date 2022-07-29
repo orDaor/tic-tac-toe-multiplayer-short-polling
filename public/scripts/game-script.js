@@ -1,12 +1,27 @@
-//player 1 name is displayed on the left, player 2 name on right
+//check if a specific player is connected to the room
+function isPlayerConnected(players, playerNumber) {
+  //extract player data
+  const name = players[playerNumber - 1].name;
+  const symbol = players[playerNumber - 1].symbol;
+  const number = players[playerNumber - 1].number;
+  //player is connected if he has ALL non-empty data values
+  return name && symbol && number;
+}
+
+//player 1 data is displayed on the left, player 2 name on right
 function setPlayersData(players) {
-  const player1Name = players[0].name;
-  const player2Name = players[1].name;
-  if (player1Name) {
-    playerNameElement1.textContent = player1Name;
+  const defaultPlayerName = "Waiting...";
+  const isPlayer1Connected = isPlayerConnected(players, 1);
+  const isPlayer2Connected = isPlayerConnected(players, 2);
+  if (isPlayer1Connected) {
+    playerNameElement1.textContent = players[0].name;
+  } else {
+    playerNameElement1.textContent = defaultPlayerName;
   }
-  if (player2Name) {
-    playerNameElement2.textContent = player2Name;
+  if (isPlayer2Connected) {
+    playerNameElement2.textContent = players[1].name;
+  } else {
+    playerNameElement2.textContent = defaultPlayerName;
   }
 }
 
@@ -36,32 +51,34 @@ function setGameBoardData(players, gameStatus) {
   for (let i = 0; i < rowsNumber; i++) {
     for (j = 0; j < columnsNumber; j++) {
       const playerNumber = board[i][j];
+      const arrayCoord = fromMatrixCoordToArrayCoord(board, i, j);
       if (playerNumber) {
         const symbol = players[playerNumber - 1].symbol;
-        const arrayCoord = fromMatrixCoordToArrayCoord(board, i, j);
         gameBoardLiElements[arrayCoord].textContent = symbol;
         gameBoardLiElements[arrayCoord].classList.add("selected");
+      } else {
+        gameBoardLiElements[arrayCoord].textContent = "";
       }
     }
   }
 }
 
 //find the number of the player this client is playing with
-function getOtherPlayerNumber(playerNumber) {
-  if (playerNumber === 1) {
+function getOtherPlayerNumber(thisPlayerNumber) {
+  if (thisPlayerNumber === 1) {
     return 2;
-  } else if (playerNumber === 2) {
+  } else if (thisPlayerNumber === 2) {
     return 1;
   }
 }
 
 //set the name of the player who has its turn
-function setActivePlayerName(yourTurn, players, playerNumber) {
+function setActivePlayerName(yourTurn, players, activePlayerNumber) {
   if (yourTurn) {
     activePlayerName.textContent = "YOUR";
     activePlayerName.nextElementSibling.textContent = "";
   } else {
-    const playerName = players[playerNumber - 1].name;
+    const playerName = players[activePlayerNumber - 1].name;
     if (playerName) {
       activePlayerName.textContent = playerName;
     }

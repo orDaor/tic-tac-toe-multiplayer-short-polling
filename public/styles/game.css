@@ -28,6 +28,7 @@
   flex-direction: column;
   gap: 0.2rem;
   justify-content: center;
+  align-items: center;
   font-size: var(--font-size-3);
   color: var(--color-grey-500);
 }
@@ -35,10 +36,16 @@
 #players-info .player-name {
   color: var(--color-primary-700);
   font-weight: bold;
+  width: 10rem;
 }
 
 #players-info p {
   margin: 0;
+}
+
+#player1,
+#player2 {
+  text-align: center;
 }
 
 .game-error-message {
@@ -138,6 +145,14 @@
 
 /* width >= 480px */
 @media (min-width: 480px) {
+  #player1 {
+    text-align: right;
+  }
+
+  #player2 {
+    text-align: left;
+  }
+
   #game-over {
     padding: 2rem;
   }
@@ -159,6 +174,7 @@
 
   #players-info {
     flex-direction: row;
+    gap: 2rem;
   }
 
   #game-over h2 {
