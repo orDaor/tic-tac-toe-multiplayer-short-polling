@@ -1,3 +1,11 @@
+function getEmptyBoard() {
+  return [
+    [0, 0, 0],
+    [0, 0, 0],
+    [0, 0, 0],
+  ];
+}
+
 function fromMatrixCoordToArrayCoord(matrix, rowCoord, colCoord) {
   //calculate rows and columns number
   const rowsNumber = matrix.length;

@@ -15,7 +15,7 @@ function initGame(responseData) {
   if (responseData.isYourTurn) {
     isMyTurnGlobal = true;
     setActivePlayerName(isMyTurnGlobal);
-    makeCellsSelectable();
+    makeEmptyCellsSelectable();
     //start periodic fetch of other player data
     const isOtherPlayerConnected = isPlayerConnected(
       responseData.players,
@@ -31,7 +31,7 @@ function initGame(responseData) {
       responseData.players,
       otherPlayerNumber
     );
-    makeCellsNotSelectable();
+    makeEmptyCellsNotSelectable();
     //start  periodic fetch of the game status
     //(server checks if it is clients turn, in that case returns updated game status)
     sendPeriodicRequest(fetchRoomDataConfig);
@@ -75,19 +75,21 @@ function setOnePlayerData(player) {
 }
 
 //releaze empty (not selected yet) game board elements so that they can be selected again
-function makeCellsSelectable() {
+function makeEmptyCellsSelectable() {
   for (const listItem of gameBoardLiElements) {
     if (!listItem.textContent) {
       listItem.classList.remove("not-selectable");
+      listItem.classList.remove("selected");
     }
   }
 }
 
 //freeze empty (not selected yet) game board elements so that they can NOT be selected again
-function makeCellsNotSelectable() {
+function makeEmptyCellsNotSelectable() {
   for (const listItem of gameBoardLiElements) {
     if (!listItem.textContent) {
       listItem.classList.add("not-selectable");
+      listItem.classList.remove("selected");
     }
   }
 }
@@ -104,7 +106,6 @@ function setGameBoardData(players, gameStatus) {
       if (playerNumber) {
         const symbol = players[playerNumber - 1].symbol;
         gameBoardLiElements[arrayCoord].textContent = symbol;
-        gameBoardLiElements[arrayCoord].classList.add("selected");
       } else {
         gameBoardLiElements[arrayCoord].textContent = "";
       }
@@ -116,7 +117,7 @@ function startYourTurn(updatedRoom) {
   isMyTurnGlobal = true;
   setActivePlayerName(isMyTurnGlobal);
   setGameBoardData(updatedRoom.players, updatedRoom.gameStatus);
-  makeCellsSelectable();
+  makeEmptyCellsSelectable();
 }
 
 //find the number of the player this client is playing with
@@ -139,6 +140,27 @@ function setActivePlayerName(isMyTurn, players, activePlayerNumber) {
       activePlayerNameElement.textContent = playerName;
     }
   }
+}
+
+//make game move
+function makeGameMove(playerNumber, players, coord) {
+  const row = coord[0];
+  const col = coord[1];
+  const symbol = players[playerNumber - 1].symbol;
+  const arrayCoord = fromMatrixCoordToArrayCoord(getEmptyBoard(), row, col);
+  gameBoardLiElements[arrayCoord].textContent = symbol;
+  gameBoardLiElements[arrayCoord].classList.add("selected");
+  gameBoardLiElements[arrayCoord].classList.remove("not-selectable");
+}
+
+//remove game move
+function removeGameMove(coord) {
+  const row = coord[0];
+  const col = coord[1];
+  const arrayCoord = fromMatrixCoordToArrayCoord(getEmptyBoard(), row, col);
+  gameBoardLiElements[arrayCoord].textContent = "";
+  gameBoardLiElements[arrayCoord].classList.remove("selected");
+  gameBoardLiElements[arrayCoord].classList.remove("not-selectable");
 }
 
 //show error message in the active game area
