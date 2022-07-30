@@ -11,7 +11,7 @@ const validation = require("../utils/validation-util");
 const sessionUtil = require("../utils/sessions-util");
 
 //main game page
-function getGame(req, res) {
+function getGame(req, res, next) {
   //fetch game data from the client session
   const gameSession = req.session.gameData;
 
@@ -166,6 +166,8 @@ async function getRoomData(req, res, next) {
   //check whether the turn is of the player who sent the request
   const isYourTurn = room.gameStatus.getCurrentTurn() === playerNumber;
 
+  //TODO: check game over case (winner, draw)
+
   //set and send response data
   if (isYourTurn) {
     responseData.room = {};
@@ -174,6 +176,48 @@ async function getRoomData(req, res, next) {
   } else {
     responseData.room = null;
   }
+  //responseData.gameOverStatus = ??
+  res.json(responseData);
+}
+
+//make a game move
+async function makeMove(req, res, next) {
+  //init response data
+  let responseData = {};
+
+  //body data
+  const coord = req.body.coord; //[row,col]
+
+  //fetch game session fata
+  const roomId = req.session.gameData.roomId;
+  const playerNumber = req.session.gameData.playerNumber;
+
+  //fetch room from the DB where client is playing
+  let room;
+  try {
+    room = await Room.findById(roomId);
+  } catch (error) {
+    next(error);
+    return;
+  }
+
+  try {
+    //make move: might fail if coordinates are not ok, or it's not this player turn
+    room.gameStatus.makeMove(playerNumber, coord);
+    //save updated room in the document
+    await room.save();
+  } catch (error) {
+    next(error);
+    return;
+  }
+
+  //TODO: check game over case (winner, draw)
+
+  //set and send response
+  responseData.players = room.players;
+  responseData.gameStatus = room.gameStatus;
+  responseData.playerNumber = playerNumber;
+  //responseData.gameOverStatus = ??
   res.json(responseData);
 }
 
@@ -182,4 +226,5 @@ module.exports = {
   getGame: getGame,
   createGameSession: createGameSession,
   getRoomData: getRoomData,
+  makeMove: makeMove,
 };

@@ -85,3 +85,54 @@ async function fetchRoomData() {
   const responseData = await response.json();
   return responseData.room;
 }
+
+//send request to make a game move in the board of the game status in the server
+async function makeGameMove(event) {
+  //if we do not click a board cell or it is not this client turn, nothing happens
+  const clickedElement = event.target;
+  if (clickedElement.tagName !== "LI" && isMyTurnGlobal) {
+    return;
+  }
+
+  //access coordinates of the clicked cell
+  const row = clickedElement.dataset.row;
+  const col = clickedElement.dataset.col;
+
+  //config ajax POST request to create a game session in the server for this client
+  let response = {};
+  const gameMoveData = {
+    coord: [row, col],
+  };
+  const url = `/game/status`;
+  const requestConfig = {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      "CSRF-Token": csrfTokenElement.content,
+    },
+    body: JSON.stringify(gameMoveData),
+  };
+
+  //send ajax request
+  try {
+    response = await fetch(url, requestConfig);
+  } catch (error) {
+    const errorMessage = "Can not reach the server now, maybe try later?";
+    displayGameErrorMessage(errorMessage);
+    return;
+  }
+
+  //parse response data
+  const responseData = await response.json();
+
+  //response with error code
+  if (!response.ok) {
+    displayGameErrorMessage(responseData.message);
+    return;
+  }
+
+  //response ok, update board on screen with updated received game status
+  //and switch to other player turn
+  finishYourTurn(responseData);
+}

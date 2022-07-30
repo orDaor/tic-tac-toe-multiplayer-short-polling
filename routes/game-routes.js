@@ -19,5 +19,8 @@ router.post("/new", gameController.createGameSession);
 //fetch actual game status data
 router.get("/room", gameController.getRoomData);
 
+//make game move
+router.post("/status", gameController.makeMove);
+
 //export
 module.exports = router;

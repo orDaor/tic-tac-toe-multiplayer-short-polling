@@ -120,6 +120,17 @@ function startYourTurn(updatedRoom) {
   makeEmptyCellsSelectable();
 }
 
+function finishYourTurn(updatedRoom) {
+  isMyTurnGlobal = false;
+  setGameBoardData(updatedRoom.players, updatedRoom.gameStatus);
+  const otherPlayerNumber = getOtherPlayerNumber(updatedRoom.playerNumber);
+  setActivePlayerName(isMyTurnGlobal, updatedRoom.players, otherPlayerNumber);
+  makeEmptyCellsNotSelectable();
+  //start  periodic fetch of the game status
+  //(server checks if it is clients turn, in that case returns updated game status)
+  sendPeriodicRequest(fetchRoomDataConfig);
+}
+
 //find the number of the player this client is playing with
 function getOtherPlayerNumber(thisPlayerNumber) {
   if (thisPlayerNumber === 1) {
@@ -143,7 +154,7 @@ function setActivePlayerName(isMyTurn, players, activePlayerNumber) {
 }
 
 //make game move
-function makeGameMove(playerNumber, players, coord) {
+function setGameMove(playerNumber, players, coord) {
   const row = coord[0];
   const col = coord[1];
   const symbol = players[playerNumber - 1].symbol;

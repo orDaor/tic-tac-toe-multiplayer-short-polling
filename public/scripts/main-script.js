@@ -21,6 +21,9 @@ const activeGameSectionElement = document.getElementById("active-game");
 const playerNameElement1 = document.getElementById("player1");
 const playerNameElement2 = document.getElementById("player2");
 
+//game board
+const gameBoardElement = document.getElementById("game-board");
+
 //game board cells
 const gameBoardLiElements = document.querySelectorAll("#game-board li");
 
@@ -47,12 +50,12 @@ const getOnePlayerDataConfig = new PeriodicRequestConfig(
 
 //ask the server if the other player made his move and fetch actual room status in that case
 const fetchRoomDataConfig = new PeriodicRequestConfig(
-    fetchRoomData, //send
-    2000, // delay [ms]
-    false, //stop
-    startYourTurn, //resolve
-    displayGameErrorMessage //handeError
-  );
+  fetchRoomData, //send
+  2000, // delay [ms]
+  false, //stop
+  startYourTurn, //resolve
+  displayGameErrorMessage //handeError
+);
 
 //EVENT LISTENERS ---------------------------------------------------------
 
@@ -63,6 +66,9 @@ formElement.addEventListener("submit", startNewGame);
 gameErrorMessageElement
   .querySelector("button")
   .addEventListener("click", hideGameErrorMessage);
+
+//make a game move
+gameBoardElement.addEventListener("click", makeGameMove);
 
 //DEBUGGING  ---------------------------------------------------------
 //...
