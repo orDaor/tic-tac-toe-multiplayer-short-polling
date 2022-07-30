@@ -12,7 +12,7 @@ function isUserInputValid(userInput) {
     return false;
   }
   const isEmpty = !userInput.name || userInput.name.trim() === "";
-  const lengthOk = userInput.name.length >= 3;
+  const lengthOk = userInput.name.length >= 3 && userInput.name.length <= 15;
   return lengthOk && !isEmpty;
 }
 
