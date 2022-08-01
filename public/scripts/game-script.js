@@ -55,12 +55,12 @@ function setPlayersData(players) {
   const isPlayer1Connected = isPlayerConnected(players, 1);
   const isPlayer2Connected = isPlayerConnected(players, 2);
   if (isPlayer1Connected) {
-    playerNameElement1.textContent = players[0].name;
+    playerNameElement1.textContent = `${players[0].name} (${players[0].symbol})`;
   } else {
     playerNameElement1.textContent = defaultPlayerName;
   }
   if (isPlayer2Connected) {
-    playerNameElement2.textContent = players[1].name;
+    playerNameElement2.textContent = `${players[1].name} (${players[1].symbol})`;
   } else {
     playerNameElement2.textContent = defaultPlayerName;
   }
@@ -69,9 +69,9 @@ function setPlayersData(players) {
 //set othe player data
 function setOnePlayerData(player) {
   if (player.number === 1) {
-    playerNameElement1.textContent = player.name;
+    playerNameElement1.textContent = `${player.name} (${player.symbol})`;
   } else if (player.number === 2) {
-    playerNameElement2.textContent = player.name;
+    playerNameElement2.textContent = `${player.name} (${player.symbol})`;
   }
 }
 

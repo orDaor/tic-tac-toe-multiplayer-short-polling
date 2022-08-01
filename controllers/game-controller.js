@@ -172,10 +172,10 @@ async function getRoomData(req, res, next) {
     responseData.room = {};
     responseData.room.players = room.players;
     responseData.room.gameStatus = room.gameStatus;
+    responseData.room.gameOverStatus = room.gameStatus.getGameOverStatus();
   } else {
     responseData.room = null;
   }
-  //responseData.gameOverStatus = ??
   res.json(responseData);
 }
 
@@ -216,6 +216,7 @@ async function makeMove(req, res, next) {
   responseData.players = room.players;
   responseData.gameStatus = room.gameStatus;
   responseData.playerNumber = playerNumber;
+  responseData.gameOverStatus = room.gameStatus.getGameOverStatus();
   //responseData.gameOverStatus = ??
   res.json(responseData);
 }
