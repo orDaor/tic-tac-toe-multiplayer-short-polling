@@ -14,6 +14,9 @@ const formErrorMessageElement = document.querySelector(
 //game config for choosing the name
 const gameConfigSectionElement = document.getElementById("game-config");
 
+//game over status
+const gameOverStatusElement = document.getElementById("game-over");
+
 //active game board
 const activeGameSectionElement = document.getElementById("active-game");
 

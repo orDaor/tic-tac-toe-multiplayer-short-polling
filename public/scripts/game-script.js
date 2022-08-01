@@ -167,7 +167,7 @@ function setActivePlayerName(isMyTurn, players, activePlayerNumber) {
 }
 
 //make game move
-function setGameMover(playerNumber, players, coord) {
+function setGameMove(playerNumber, players, coord) {
   const row = coord[0];
   const col = coord[1];
   const symbol = players[playerNumber - 1].symbol;
@@ -178,13 +178,25 @@ function setGameMover(playerNumber, players, coord) {
 }
 
 //remove game move
-function removeGameMover(coord) {
+function removeGameMove(coord) {
   const row = coord[0];
   const col = coord[1];
   const arrayCoord = fromMatrixCoordToArrayCoord(getEmptyBoard(), row, col);
   gameBoardLiElements[arrayCoord].textContent = "";
   gameBoardLiElements[arrayCoord].classList.remove("selected");
   gameBoardLiElements[arrayCoord].classList.remove("not-selectable");
+}
+
+//set winner player name
+function setGameOverStatus(didIWin, isDraw) {
+  const gameOverStatusH2Element = gameOverStatusElement.querySelector("h2");
+  if (didIWin) {
+    gameOverStatusH2Element.textContent = "You WON!";
+  } else if (isDraw) {
+    gameOverStatusH2Element.textContent = "It's a DRAW!";
+  } else {
+    gameOverStatusH2Element.textContent = "You LOST!";
+  }
 }
 
 //show error message in the active game area
