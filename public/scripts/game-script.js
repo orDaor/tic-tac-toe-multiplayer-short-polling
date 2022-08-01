@@ -67,11 +67,15 @@ function setPlayersData(players) {
 }
 
 //set othe player data
-function setOnePlayerData(player) {
+function setOtherPlayerData(player) {
   if (player.number === 1) {
     playerNameElement1.textContent = `${player.name} (${player.symbol})`;
   } else if (player.number === 2) {
     playerNameElement2.textContent = `${player.name} (${player.symbol})`;
+  }
+  //update active player name with other player data if it is not my turn
+  if (!isMyTurnGlobal) {
+    activePlayerNameElement.textContent = player.name;
   }
 }
 
@@ -162,8 +166,10 @@ function setActivePlayerName(isMyTurn, players, activePlayerNumber) {
     const playerName = players[activePlayerNumber - 1].name;
     if (playerName) {
       activePlayerNameElement.textContent = playerName;
-      activePlayerNameElement.nextSibling.textContent = "'s";
+    } else {
+      activePlayerNameElement.textContent = "Other Player";
     }
+    activePlayerNameElement.nextSibling.textContent = "'s";
   }
 }
 

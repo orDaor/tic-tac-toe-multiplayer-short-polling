@@ -47,7 +47,7 @@ const getOnePlayerDataConfig = new PeriodicRequestConfig(
   fetchOnePlayerData, //send
   2000, // delay [ms]
   false, //stop
-  setOnePlayerData, //resolve
+  setOtherPlayerData, //resolve
   displayGameErrorMessage //handeError
 );
 
