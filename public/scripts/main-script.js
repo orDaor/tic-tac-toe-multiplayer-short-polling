@@ -35,6 +35,9 @@ const gameErrorMessageElement = document.querySelector(
   "#active-game .game-error-message"
 );
 
+//game turn info
+const gameTurnInfo = document.getElementById("game-turn");
+
 //name of the player who has his turn
 const activePlayerNameElement = document.getElementById("active-player-name");
 

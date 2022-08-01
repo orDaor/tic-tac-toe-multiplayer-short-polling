@@ -129,20 +129,42 @@ function setGameBoardData(players, gameStatus) {
 }
 
 function startYourTurn(updatedRoom) {
+  setGameBoardData(updatedRoom.players, updatedRoom.gameStatus);
+  makeEmptyCellsNotSelectable();
+  makeSignedCellsSelected();
+  //check if the other player won or generated a draw after successfully making his game move
+  const gameOverStatus = updatedRoom.gameOverStatus;
+  if (gameOverStatus.isOver) {
+    isMyTurnGlobal = false;
+    displayGameOverStatus();
+    setGameOverStatus(!gameOverStatus.isWinner, gameOverStatus.isDraw);
+    hideGameTurnInfo();
+    return;
+  }
+
+  //after the other player made his move, the game is not over yet...
+  makeEmptyCellsSelectable();
   isMyTurnGlobal = true;
   setActivePlayerName(isMyTurnGlobal);
-  setGameBoardData(updatedRoom.players, updatedRoom.gameStatus);
-  makeEmptyCellsSelectable();
-  makeSignedCellsSelected();
 }
 
 function finishYourTurn(updatedRoom) {
   isMyTurnGlobal = false;
   setGameBoardData(updatedRoom.players, updatedRoom.gameStatus);
-  const otherPlayerNumber = getOtherPlayerNumber(updatedRoom.playerNumber);
-  setActivePlayerName(isMyTurnGlobal, updatedRoom.players, otherPlayerNumber);
   makeEmptyCellsNotSelectable();
   makeSignedCellsSelected();
+  //check if you won or generated a draw after successfully making your game move
+  const gameOverStatus = updatedRoom.gameOverStatus;
+  if (gameOverStatus.isOver) {
+    displayGameOverStatus();
+    setGameOverStatus(gameOverStatus.isWinner, gameOverStatus.isDraw);
+    hideGameTurnInfo();
+    return;
+  }
+
+  //after making your move, game is not over yet...
+  const otherPlayerNumber = getOtherPlayerNumber(updatedRoom.playerNumber);
+  setActivePlayerName(isMyTurnGlobal, updatedRoom.players, otherPlayerNumber);
   //start  periodic fetch of the game status
   //(server checks if it is clients turn, in that case returns updated game status)
   sendPeriodicRequest(fetchRoomDataConfig);
@@ -173,6 +195,16 @@ function setActivePlayerName(isMyTurn, players, activePlayerNumber) {
   }
 }
 
+//show game turn info
+function displayGameTurnInfo() {
+  gameTurnInfo.style.display = "block";
+}
+
+//hide game turn info
+function hideGameTurnInfo() {
+  gameTurnInfo.style.display = "none";
+}
+
 //make game move
 function setGameMove(playerNumber, players, coord) {
   const row = coord[0];
@@ -197,13 +229,23 @@ function removeGameMove(coord) {
 //set winner player name
 function setGameOverStatus(didIWin, isDraw) {
   const gameOverStatusH2Element = gameOverStatusElement.querySelector("h2");
-  if (didIWin) {
+  if (didIWin && !isDraw) {
     gameOverStatusH2Element.textContent = "You WON!";
   } else if (isDraw) {
     gameOverStatusH2Element.textContent = "It's a DRAW!";
   } else {
     gameOverStatusH2Element.textContent = "You LOST!";
   }
+}
+
+//show game over status
+function displayGameOverStatus() {
+  gameOverStatusElement.style.display = "block";
+}
+
+//hide game over status
+function hideGameOverStatus() {
+  gameOverStatusElement.style.display = "none";
 }
 
 //show error message in the active game area
