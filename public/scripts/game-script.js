@@ -161,6 +161,7 @@ function setActivePlayerName(isMyTurn, players, activePlayerNumber) {
     const playerName = players[activePlayerNumber - 1].name;
     if (playerName) {
       activePlayerNameElement.textContent = playerName;
+      activePlayerNameElement.nextSibling.textContent = "'s";
     }
   }
 }
