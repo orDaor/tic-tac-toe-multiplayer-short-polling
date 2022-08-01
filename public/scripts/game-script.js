@@ -16,6 +16,7 @@ function initGame(responseData) {
     isMyTurnGlobal = true;
     setActivePlayerName(isMyTurnGlobal);
     makeEmptyCellsSelectable();
+    makeSignedCellsSelected();
     //start periodic fetch of other player data
     const isOtherPlayerConnected = isPlayerConnected(
       responseData.players,
