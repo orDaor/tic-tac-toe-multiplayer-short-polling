@@ -94,6 +94,16 @@ function makeEmptyCellsNotSelectable() {
   }
 }
 
+//apply selected class to NON empty cells (containing a symbol)
+function makeSignedCellsSelected() {
+  for (const listItem of gameBoardLiElements) {
+    if (listItem.textContent) {
+      listItem.classList.add("selected");
+      listItem.classList.remove("not-selectable");
+    }
+  }
+}
+
 //allign the game board status with the one in the server
 function setGameBoardData(players, gameStatus) {
   const board = gameStatus.board;
@@ -118,6 +128,7 @@ function startYourTurn(updatedRoom) {
   setActivePlayerName(isMyTurnGlobal);
   setGameBoardData(updatedRoom.players, updatedRoom.gameStatus);
   makeEmptyCellsSelectable();
+  makeSignedCellsSelected();
 }
 
 function finishYourTurn(updatedRoom) {
@@ -126,6 +137,7 @@ function finishYourTurn(updatedRoom) {
   const otherPlayerNumber = getOtherPlayerNumber(updatedRoom.playerNumber);
   setActivePlayerName(isMyTurnGlobal, updatedRoom.players, otherPlayerNumber);
   makeEmptyCellsNotSelectable();
+  makeSignedCellsSelected();
   //start  periodic fetch of the game status
   //(server checks if it is clients turn, in that case returns updated game status)
   sendPeriodicRequest(fetchRoomDataConfig);
@@ -154,7 +166,7 @@ function setActivePlayerName(isMyTurn, players, activePlayerNumber) {
 }
 
 //make game move
-function setGameMove(playerNumber, players, coord) {
+function setGameMover(playerNumber, players, coord) {
   const row = coord[0];
   const col = coord[1];
   const symbol = players[playerNumber - 1].symbol;
@@ -165,7 +177,7 @@ function setGameMove(playerNumber, players, coord) {
 }
 
 //remove game move
-function removeGameMove(coord) {
+function removeGameMover(coord) {
   const row = coord[0];
   const col = coord[1];
   const arrayCoord = fromMatrixCoordToArrayCoord(getEmptyBoard(), row, col);

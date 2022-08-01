@@ -162,7 +162,6 @@ async function getRoomData(req, res, next) {
     next(error);
     return;
   }
-
   //check whether the turn is of the player who sent the request
   const isYourTurn = room.gameStatus.getCurrentTurn() === playerNumber;
 
@@ -172,7 +171,7 @@ async function getRoomData(req, res, next) {
   if (isYourTurn) {
     responseData.room = {};
     responseData.room.players = room.players;
-    responseData.room = room.gameStatus;
+    responseData.room.gameStatus = room.gameStatus;
   } else {
     responseData.room = null;
   }

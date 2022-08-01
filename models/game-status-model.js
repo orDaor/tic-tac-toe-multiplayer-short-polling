@@ -30,38 +30,38 @@ class GameStatus {
   makeMove(playernumber, coord) {
     //requested matrix coordinates where the player with playerNumber
     //want to make his move
-    const row = coord[0];
-    const col = coord[1];
+    const row = +coord[0];
+    const col = +coord[1];
 
     //check matrix coord validity
     const rowsNumber = this.board.length;
     const columnsNumber = this.board[0].length;
     const inputsOk =
       row >= 0 && col >= 0 && row <= rowsNumber && col <= columnsNumber;
-    if (inputsOk) {
+    if (!inputsOk) {
       throw new Error("Matrix coordinates out of range");
     }
 
     //check if user is allowed to make the move (if it is his turn)
     const currentTurn = this.getCurrentTurn();
-    if (currentTurn !== playernumber) {
+    if (currentTurn !== playernumber && currentTurn) {
       throw new Error("Player wants to make a move, but it is not his turn");
     }
 
     //check if in the requested cell coordinates a move was already performed
-    if (this.board[row][col]) {
+    if (this.board[row - 1][col - 1]) {
       throw new Error("A game move to this coordinates was already made");
     }
 
     //update matrix board
-    this.board[row][col] = playernumber;
+    this.board[row - 1][col - 1] = playernumber;
     //update lastMove (by using GameMove constructor?)
     this.lastMove = new GameMove(playernumber, coord);
   }
 
   //which player's turn is it?
   getCurrentTurn() {
-    const lastMovePlayerNumber = this.lastMove.playernumber;
+    const lastMovePlayerNumber = this.lastMove.playerNumber;
     if (lastMovePlayerNumber === 1) {
       return 2;
     } else if (lastMovePlayerNumber === 2) {

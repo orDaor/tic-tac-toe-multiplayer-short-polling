@@ -90,13 +90,18 @@ async function fetchRoomData() {
 async function makeGameMove(event) {
   //if we do not click a board cell or it is not this client turn, nothing happens
   const clickedElement = event.target;
-  if (clickedElement.tagName !== "LI" && isMyTurnGlobal) {
+  if (
+    clickedElement.tagName !== "LI" ||
+    !isMyTurnGlobal ||
+    clickedElement.textContent ||
+    clickedElement.classList.contains("selected")
+  ) {
     return;
   }
 
   //access coordinates of the clicked cell
-  const row = clickedElement.dataset.row;
-  const col = clickedElement.dataset.col;
+  const row = +clickedElement.dataset.row;
+  const col = +clickedElement.dataset.col;
 
   //config ajax POST request to create a game session in the server for this client
   let response = {};

@@ -110,7 +110,6 @@ class Room {
     if (!document) {
       throw new Error("No room found");
     }
-
     //return Room class obj
     return Room.fromMongoDBDocumentToRoom(document); //still returns undefined if no document is found
   }
