@@ -4,12 +4,23 @@
 
 //imports custom
 const Room = require("./room-model");
+const GameStatus = require("./game-status-model");
+const GameMove = require("./game-move-model");
 const GameBoardCellData = require("./game-board-cell-data-model");
 const gameUtil = require("../utils/game-util");
 
 class ViewData {
   constructor(room, playerNumber) {
-    const gameStatus = room.gameStatus;
+    let gameStatus;
+    if (room) {
+      gameStatus = room.gameStatus;
+    } else {
+      gameStatus = new GameStatus(
+        gameUtil.getEmptyBoard(),
+        new GameMove(0, [null, null], "null")
+      );
+    }
+
     const gameTurn = gameStatus.getCurrentTurn();
     const board = gameStatus.board;
     const boardRowsNumber = board.length;
@@ -108,7 +119,7 @@ class ViewData {
     for (let i = 0; i < boardRowsNumber; i++) {
       for (let j = 0; j < boardColumnsNumber; j++) {
         const arrayCoord = gameUtil.fromMatrixCoordToArrayCoord(board, i, j);
-        this.boardCellsList[arrayCoord] = new GameBoardCellData(i, j, "", true);
+        this.boardCellsList[arrayCoord] = new GameBoardCellData(i + 1, j + 1, "", true);
       }
     }
   }
@@ -117,32 +128,3 @@ class ViewData {
 //export
 module.exports = ViewData;
 
-//test
-const testRoom = {
-  // _id: ObjectId("62e95464a6ba388593a659ab"),
-  players: [
-    { name: "Orgher", symbol: "X", number: 1 },
-    { name: "Manu", symbol: "O", number: 2 },
-  ],
-  gameStatus: {
-    board: [
-      [1, 2, 1],
-      [1, 2, 2],
-      [2, 1, 1],
-    ],
-    lastMove: {
-      playerNumber: 1,
-      coord: [3, 3],
-      // date: ISODate("2022-08-02T16:44:41.754Z")
-    },
-  },
-  available: false,
-  // creationDate: ISODate("2022-08-02T16:44:20.085Z"),
-  blocked: false,
-};
-
-const testRoomFromClass = Room.fromMongoDBDocumentToRoom(testRoom);
-
-const testViewData = new ViewData(testRoomFromClass, 2);
-// testViewData = new ViewData(null);
-console.log(testViewData);
