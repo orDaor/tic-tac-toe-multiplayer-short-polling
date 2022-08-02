@@ -7,25 +7,34 @@ const Room = require("../models/room-model");
 const GameStatus = require("../models/game-status-model");
 const GameMove = require("../models/game-move-model");
 const Player = require("../models/player-model");
+const ViewData = require("../models/view-data-model");
 const validation = require("../utils/validation-util");
 const sessionUtil = require("../utils/sessions-util");
 
 //main game page
-function getGame(req, res, next) {
+async function getGame(req, res, next) {
   //fetch game data from the client session
   const gameSession = req.session.gameData;
 
-  //init game data to be injected in the view
-  const gameData = {};
-
+  let viewData;
   if (gameSession) {
     //fetch game data to be injected in the view
+    try {
+      req.locals.room = await Room.findById(roomId);
+      viewData = {
+        ...viewUtil.getInitViewData(),
+        ...req.locals.room,
+      };
+    } catch (error) {
+      //send page
+    }
+    //
   } else {
     //...
   }
 
   //response
-  res.render("game", { gameData: gameData });
+  res.render("game");
 }
 
 //associate the client as a player number to a new game room
