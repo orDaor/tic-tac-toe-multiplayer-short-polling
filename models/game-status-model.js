@@ -42,10 +42,16 @@ class GameStatus {
       throw new Error("Matrix coordinates out of range");
     }
 
-    //check if user is allowed to make the move (if it is his turn)
+    //check if user is allowed to make the move: is it his turn?
     const currentTurn = this.getCurrentTurn();
     if (currentTurn !== playernumber && currentTurn) {
       throw new Error("Player wants to make a move, but it is not his turn");
+    }
+
+    //check if user is allowed to make the move: was game over?
+    const gameOverStatus = this.getGameOverStatus();
+    if (gameOverStatus.isOver) {
+      throw new Error("Player wants to make a move, but game is over");
     }
 
     //check if in the requested cell coordinates a move was already performed
