@@ -27,9 +27,8 @@ class GameStatus {
   }
 
   //make a game move
-  makeMove(playernumber, coord) {
-    //requested matrix coordinates where the player with playerNumber
-    //want to make his move
+  makeMove(player, coord) {
+    //requested matrix coordinates where the player want to make his move
     const row = +coord[0];
     const col = +coord[1];
 
@@ -44,7 +43,10 @@ class GameStatus {
 
     //check if user is allowed to make the move: is it his turn?
     const currentTurn = this.getCurrentTurn();
-    if (currentTurn !== playernumber && currentTurn) {
+    if (
+      (currentTurn && currentTurn !== player.number) ||
+      (!currentTurn && !player.arrivedFirst)
+    ) {
       throw new Error("Player wants to make a move, but it is not his turn");
     }
 
@@ -60,9 +62,9 @@ class GameStatus {
     }
 
     //update matrix board
-    this.board[row - 1][col - 1] = playernumber;
+    this.board[row - 1][col - 1] = player.number;
     //update lastMove (by using GameMove constructor?)
-    this.lastMove = new GameMove(playernumber, coord);
+    this.lastMove = new GameMove(player.number, coord);
   }
 
   //which player's turn is it?

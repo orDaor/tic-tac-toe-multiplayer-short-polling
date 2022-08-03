@@ -22,7 +22,7 @@ async function getGame(req, res, next) {
     try {
       req.locals.room = await Room.findById(roomId);
       viewData = {
-        ...viewUtil.getInitViewData(),
+        // ...viewUtil.getInitViewData(),
         ...req.locals.room,
       };
     } catch (error) {
@@ -71,7 +71,7 @@ async function createGameSession(req, res, next) {
     symbol = newRoom.getAvailableGameSymbol(); //default = X in an empty room
 
     //create a player with the user input data and save it inside the room
-    player = new Player(req.body.name, symbol, playerNumber);
+    player = new Player(req.body.name, symbol, playerNumber, true);
     newRoom.addPlayer(player);
 
     //save the new created room in the DB
@@ -88,7 +88,7 @@ async function createGameSession(req, res, next) {
 
     //map the client to the saved room by its session
     sessionUtil.saveGameSession(req, {
-      roomId: newRoomId.toString(),
+      roomId: newRoom.roomId,
       playerNumber: playerNumber,
     });
 
@@ -106,12 +106,20 @@ async function createGameSession(req, res, next) {
     availableRoom.isPlayerSlotAvailable(1) &&
     availableRoom.isPlayerSlotAvailable(2);
 
+  //check if client is first player to join the found room
+  let arrivedFirst;
+  if (areBothPlayerStolsAvailable) {
+    arrivedFirst = true;
+  } else {
+    arrivedFirst = false;
+  }
+
   //connect the client to the room room with an available player stol (player number) 1 or 2
   playerNumber = availableRoom.getAvailablePlayerSlot();
   symbol = availableRoom.getAvailableGameSymbol();
 
   //create a player with the user input data and save it inside the room
-  player = new Player(req.body.name, symbol, playerNumber);
+  player = new Player(req.body.name, symbol, playerNumber, arrivedFirst);
   availableRoom.addPlayer(player);
 
   //un-block the room
@@ -203,7 +211,8 @@ async function makeMove(req, res, next) {
   try {
     room = await Room.findById(roomId);
     //make move: might fail if coordinates are not ok, or it's not this player turn
-    room.gameStatus.makeMove(playerNumber, coord);
+    const player = room.getPlayer(playerNumber);
+    room.gameStatus.makeMove(player, coord);
     //save updated room in the document
     await room.save();
   } catch (error) {

@@ -36,8 +36,8 @@ class Room {
     const emptyBoard = gameUtil.getEmptyBoard();
     const emptyGameMove = new GameMove(0, [null, null], "null");
     const gameStatus = new GameStatus(emptyBoard, emptyGameMove);
-    const player1 = new Player("", "", 0);
-    const player2 = new Player("", "", 0);
+    const player1 = new Player("", "", 0, false);
+    const player2 = new Player("", "", 0, false);
     //create and return the new room
     return new Room(
       [player1, player2],
