@@ -174,8 +174,6 @@ async function getRoomData(req, res, next) {
   //check whether the turn is of the player who sent the request
   const isYourTurn = room.gameStatus.getCurrentTurn() === playerNumber;
 
-  //TODO: check game over case (winner, draw)
-
   //set and send response data
   if (isYourTurn) {
     responseData.room = {};
@@ -204,12 +202,6 @@ async function makeMove(req, res, next) {
   let room;
   try {
     room = await Room.findById(roomId);
-  } catch (error) {
-    next(error);
-    return;
-  }
-
-  try {
     //make move: might fail if coordinates are not ok, or it's not this player turn
     room.gameStatus.makeMove(playerNumber, coord);
     //save updated room in the document
@@ -218,8 +210,6 @@ async function makeMove(req, res, next) {
     next(error);
     return;
   }
-
-  //TODO: check game over case (winner, draw)
 
   //set and send response
   responseData.players = room.players;

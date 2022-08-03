@@ -11,6 +11,14 @@ const gameUtil = require("../utils/game-util");
 
 class ViewData {
   constructor(room, playerNumber) {
+    //if a room is passed with no player number, then return an error because
+    //the output room data are built here relative to the player who is requesting such room data,
+    //and which is currently playing inside this room
+    if(room && !playerNumber) {
+      throw new Error("Player number parameter is missing");
+    }
+
+    //room game status
     let gameStatus;
     if (room) {
       gameStatus = room.gameStatus;
@@ -21,7 +29,11 @@ class ViewData {
       );
     }
 
+    //check what player has the turn in this room
     const gameTurn = gameStatus.getCurrentTurn();
+    const isYourTurn = gameTurn === playerNumber;
+
+    //game board data
     const board = gameStatus.board;
     const boardRowsNumber = board.length;
     const boardColumnsNumber = board[0].length;
@@ -43,13 +55,16 @@ class ViewData {
       this.player1Symbol = players[0].symbol;
       this.player2Symbol = players[1].symbol;
 
+      //game turn
+      this.isYourTurn = isYourTurn;
+
       if (!gameOverStatus.isOver) {
         //game is not over yet...
         this.gameOverStatusDisplay = "none";
         this.gameTurnInfoDisplay = "block";
         this.gameOverStatusText = "Game over status text";
         //set the active player name based on current player turn
-        if (gameTurn === playerNumber) {
+        if (isYourTurn) {
           this.activePlayerName = "YOUR";
           this.activePlayerNameNextSibling = "";
         } else {
@@ -96,7 +111,7 @@ class ViewData {
             i + 1,
             j + 1,
             symbol,
-            gameTurn === playerNumber && !gameOverStatus.isOver
+            isYourTurn && !gameOverStatus.isOver
           );
         }
       }
@@ -115,11 +130,17 @@ class ViewData {
     this.player2Symbol = "";
     this.activePlayerName = "Active Player Name";
     this.activePlayerNameNextSibling = "'s";
+    this.isYourTurn = false;
     //create a list of empty cells
     for (let i = 0; i < boardRowsNumber; i++) {
       for (let j = 0; j < boardColumnsNumber; j++) {
         const arrayCoord = gameUtil.fromMatrixCoordToArrayCoord(board, i, j);
-        this.boardCellsList[arrayCoord] = new GameBoardCellData(i + 1, j + 1, "", true);
+        this.boardCellsList[arrayCoord] = new GameBoardCellData(
+          i + 1,
+          j + 1,
+          "",
+          true
+        );
       }
     }
   }
@@ -127,4 +148,3 @@ class ViewData {
 
 //export
 module.exports = ViewData;
-
