@@ -18,8 +18,8 @@ const gameConfigSectionElement = document.getElementById("game-config");
 const gameOverStatusElement = document.getElementById("game-over");
 
 //game over buttons
-const playAgainButtonElement = document.querySelector("#game-over .btn-alt");
-const joinNewRoomButtonElement = document.querySelector("#game-over .btn");
+const playAgainButtonElement = document.querySelector("#play-again-btn");
+const joinNewRoomButtonElement = document.querySelector("#join-new-room-btn");
 
 //active game board
 const activeGameSectionElement = document.getElementById("active-game");

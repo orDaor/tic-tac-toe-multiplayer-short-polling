@@ -162,7 +162,7 @@ async function playAgain(event) {
     response = await fetch(url, requestConfig);
   } catch (error) {
     const errorMessage = "Can not reach the server now, maybe try later?";
-    displayFormErrorMessage(errorMessage);
+    displayGameErrorMessage(errorMessage);
     return;
   }
 
@@ -171,7 +171,7 @@ async function playAgain(event) {
 
   //response with error code
   if (!response.ok) {
-    displayFormErrorMessage(responseData.message);
+    displayGameErrorMessage(responseData.message);
     return;
   }
 

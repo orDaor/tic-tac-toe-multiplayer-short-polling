@@ -271,13 +271,14 @@ async function playAgain(req, res, next) {
     responseData.gameStatus = room.gameStatus;
     responseData.playerNumber = playerNumber;
     responseData.isYourTurn = true;
+    res.json(responseData);
     return;
   } else if (isWinnerPlayer) {
     //set and send response data
     responseData.players = room.players;
     responseData.gameStatus = new GameStatus( //empty game status
       gameUtil.getEmptyBoard(),
-      new GameMove(0, [null, null, "null"])
+      new GameMove(0, [null, null], "null")
     );
     responseData.playerNumber = playerNumber;
     responseData.isYourTurn = false;

@@ -3,6 +3,8 @@ function initGame(responseData) {
   //operation was successful, display gameboard and correct game info
   hideGameConfigSection();
   displayActiveGameSection();
+  hideGameOverStatus();
+  displayGameTurnInfo();
 
   //set the player names using server response data
   setPlayersData(responseData.players);
