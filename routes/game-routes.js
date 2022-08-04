@@ -14,13 +14,16 @@ const router = express.Router();
 router.get("/", gameController.getGame);
 
 //create a game session for the client
-router.post("/new", gameController.createGameSession);
+router.post("/new", gameController.joinNewRoom);
 
 //fetch actual game status data
 router.get("/room", gameController.getRoomData);
 
 //make game move
 router.post("/status", gameController.makeMove);
+
+//restart the game with the other player
+router.post("/restart", gameController.playAgain);
 
 //export
 module.exports = router;

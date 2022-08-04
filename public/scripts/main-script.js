@@ -17,6 +17,10 @@ const gameConfigSectionElement = document.getElementById("game-config");
 //game over status
 const gameOverStatusElement = document.getElementById("game-over");
 
+//game over buttons
+const playAgainButtonElement = document.querySelector("#game-over .btn-alt");
+const joinNewRoomButtonElement = document.querySelector("#game-over .btn");
+
 //active game board
 const activeGameSectionElement = document.getElementById("active-game");
 
@@ -65,8 +69,14 @@ const fetchRoomDataConfig = new PeriodicRequestConfig(
 
 //EVENT LISTENERS ---------------------------------------------------------
 
-//for submission
-formElement.addEventListener("submit", startNewGame);
+//for submission for joining a new room
+formElement.addEventListener("submit", joinNewRoom);
+
+//join a new room after game over
+playAgainButtonElement.addEventListener("click", playAgain);
+
+//play again with the other player after game over
+joinNewRoomButtonElement.addEventListener("click", joinNewRoom);
 
 //hide game error message by clicking on the "X" button
 gameErrorMessageElement

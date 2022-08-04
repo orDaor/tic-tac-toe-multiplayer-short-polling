@@ -6,11 +6,11 @@
 const db = require("../data/database");
 
 class Player {
-  constructor(name, symbol, number, arrivedFirst) {
+  constructor(name, symbol, number, hasTurn) {
     this.name = name;
     this.symbol = symbol;
     this.number = number;
-    this.arrivedFirst = arrivedFirst;
+    this.hasTurn = hasTurn;
   }
   //generate Player class object from mongodb player document
   static fromMongoDBDocumentToPlayer(document) {
@@ -24,7 +24,7 @@ class Player {
       document.name,
       document.symbol,
       document.number,
-      document.arrivedFirst
+      document.hasTurn
     );
   }
 }

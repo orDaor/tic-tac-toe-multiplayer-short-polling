@@ -168,6 +168,15 @@ class Room {
     this.available = true;
   }
 
+  //update players hasTurn property
+  //NOTE: playerNumbe --> number of the player who made successfully a game move
+  //Example: if player 1 made successfully his move, then it is the turn of player 2 
+  setPlayersTurn(playerNumber) {
+    this.players[playerNumber - 1].hasTurn = false;
+    const otherPlayerNumber = gameUtil.getOtherPlayerNumber(playerNumber);
+    this.players[otherPlayerNumber - 1].hasTurn = true;
+  }
+
   //check if one player 1 or 2 is connected to the room
   isPlayerSlotAvailable(playerNumber) {
     //extract player data

@@ -10,6 +10,7 @@ const Player = require("../models/player-model");
 const ViewData = require("../models/view-data-model");
 const validation = require("../utils/validation-util");
 const sessionUtil = require("../utils/sessions-util");
+const gameUtil = require("../utils/game-util");
 
 //main game page
 async function getGame(req, res, next) {
@@ -38,7 +39,7 @@ async function getGame(req, res, next) {
 }
 
 //associate the client as a player number to a new game room
-async function createGameSession(req, res, next) {
+async function joinNewRoom(req, res, next) {
   //init response data
   let responseData = {};
   //validate user input
@@ -107,11 +108,18 @@ async function createGameSession(req, res, next) {
     availableRoom.isPlayerSlotAvailable(2);
 
   //check if client is first player to join the found room
-  let arrivedFirst;
+  let hasPlayerTurn;
   if (areBothPlayerStolsAvailable) {
-    arrivedFirst = true;
+    //no other player was found in this available room
+    hasPlayerTurn = true;
   } else {
-    arrivedFirst = false;
+    if (availableRoom.gameStatus.getCurrentTurn()) {
+      //another player was found which already did his move
+      hasPlayerTurn = true;
+    } else {
+      //another player was found which did not do his move yet
+      hasPlayerTurn = false;
+    }
   }
 
   //connect the client to the room room with an available player stol (player number) 1 or 2
@@ -119,7 +127,7 @@ async function createGameSession(req, res, next) {
   symbol = availableRoom.getAvailableGameSymbol();
 
   //create a player with the user input data and save it inside the room
-  player = new Player(req.body.name, symbol, playerNumber, arrivedFirst);
+  player = new Player(req.body.name, symbol, playerNumber, hasPlayerTurn);
   availableRoom.addPlayer(player);
 
   //un-block the room
@@ -144,20 +152,7 @@ async function createGameSession(req, res, next) {
   responseData.players = availableRoom.players;
   responseData.gameStatus = availableRoom.gameStatus;
   responseData.playerNumber = playerNumber;
-
-  if (areBothPlayerStolsAvailable) {
-    responseData.isYourTurn = true;
-  } else {
-    //only one player slot was free in the available room found
-    if (availableRoom.gameStatus.getCurrentTurn()) {
-      //the player waiting in the room did already his move
-      responseData.isYourTurn = true;
-    } else {
-      //the player waiting in the room did not dio his move yet
-      responseData.isYourTurn = false;
-    }
-  }
-
+  responseData.isYourTurn = hasPlayerTurn;
   res.json(responseData);
   return;
 }
@@ -213,6 +208,8 @@ async function makeMove(req, res, next) {
     //make move: might fail if coordinates are not ok, or it's not this player turn
     const player = room.getPlayer(playerNumber);
     room.gameStatus.makeMove(player, coord);
+    //update hasTurn property of players
+    room.setPlayersTurn(playerNumber);
     //save updated room in the document
     await room.save();
   } catch (error) {
@@ -229,10 +226,77 @@ async function makeMove(req, res, next) {
   res.json(responseData);
 }
 
+//start a new game with the other player
+async function playAgain(req, res, next) {
+  //init response data
+  let responseData = {};
+
+  //fetch game session fata
+  const roomId = req.session.gameData.roomId;
+  const playerNumber = req.session.gameData.playerNumber;
+
+  //fetch room from the DB where client is playing
+  let room;
+  try {
+    room = await Room.findById(roomId);
+  } catch (error) {
+    next(error);
+    return;
+  }
+
+  //room exists: check is game is actually over
+  const gameOverStatus = room.gameStatus.getGameOverStatus();
+
+  //only the client who lost the game can reset the game status (board + last move)
+  //when requesting to restart the game. Instead
+  //if we have a draw, only the client who joined first the room can restart the game first
+  const isLooserPlayer =
+    gameOverStatus.isWinner &&
+    gameOverStatus.winnerPlayerNumber !== playerNumber;
+
+  const isWinnerPlayer =
+    gameOverStatus.isWinner &&
+    gameOverStatus.winnerPlayerNumber == playerNumber;
+
+  if (isLooserPlayer) {
+    room.gameStatus.reset();
+    try {
+      await room.save();
+    } catch (error) {
+      next(error);
+      return;
+    }
+    //set and send response data
+    responseData.players = room.players;
+    responseData.gameStatus = room.gameStatus;
+    responseData.playerNumber = playerNumber;
+    responseData.isYourTurn = true;
+    return;
+  } else if (isWinnerPlayer) {
+    //set and send response data
+    responseData.players = room.players;
+    responseData.gameStatus = new GameStatus( //empty game status
+      gameUtil.getEmptyBoard(),
+      new GameMove(0, [null, null, "null"])
+    );
+    responseData.playerNumber = playerNumber;
+    responseData.isYourTurn = false;
+    res.json(responseData);
+    return;
+  } else {
+    const error = new Error(
+      "An error occured when player tried to re-start the game"
+    );
+    next(error);
+    return;
+  }
+}
+
 //export
 module.exports = {
   getGame: getGame,
-  createGameSession: createGameSession,
+  joinNewRoom: joinNewRoom,
   getRoomData: getRoomData,
   makeMove: makeMove,
+  playAgain: playAgain,
 };

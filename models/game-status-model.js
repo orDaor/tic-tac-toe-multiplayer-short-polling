@@ -45,7 +45,7 @@ class GameStatus {
     const currentTurn = this.getCurrentTurn();
     if (
       (currentTurn && currentTurn !== player.number) ||
-      (!currentTurn && !player.arrivedFirst)
+      (!currentTurn && !player.hasTurn)
     ) {
       throw new Error("Player wants to make a move, but it is not his turn");
     }
@@ -106,6 +106,12 @@ class GameStatus {
 
     //a draw occured
     return new GameOverStatus(true);
+  }
+
+  //reset
+  reset() {
+    this.board = gameUtil.getEmptyBoard();
+    this.lastMove = new GameMove(0, [null, null], "null");
   }
 }
 

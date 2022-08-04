@@ -1,5 +1,5 @@
 //send request to create a new game session
-async function startNewGame(event) {
+async function joinNewRoom(event) {
   //prevent form from being submitted
   event.preventDefault();
 
@@ -140,4 +140,41 @@ async function makeGameMove(event) {
   //response ok, update board on screen with updated received game status
   //and switch to other player turn
   finishYourTurn(responseData);
+}
+
+//send request to start a new game with the other player
+async function playAgain(event) {
+  //config ajax POST request to create a game session in the server for this client
+  let response = {};
+  const url = `/game/restart`;
+  const requestConfig = {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      "CSRF-Token": csrfTokenElement.content,
+    },
+    body: JSON.stringify({}), //empty body
+  };
+
+  //send ajax request
+  try {
+    response = await fetch(url, requestConfig);
+  } catch (error) {
+    const errorMessage = "Can not reach the server now, maybe try later?";
+    displayFormErrorMessage(errorMessage);
+    return;
+  }
+
+  //parse response data
+  const responseData = await response.json();
+
+  //response with error code
+  if (!response.ok) {
+    displayFormErrorMessage(responseData.message);
+    return;
+  }
+
+  //initialize the new game
+  initGame(responseData);
 }
