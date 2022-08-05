@@ -72,7 +72,7 @@ async function joinNewRoom(req, res, next) {
     symbol = newRoom.getAvailableGameSymbol(); //default = X in an empty room
 
     //create a player with the user input data and save it inside the room
-    player = new Player(req.body.name, symbol, playerNumber, true);
+    player = new Player(req.body.name, symbol, playerNumber, true, false);
     newRoom.addPlayer(player);
 
     //save the new created room in the DB
@@ -127,7 +127,13 @@ async function joinNewRoom(req, res, next) {
   symbol = availableRoom.getAvailableGameSymbol();
 
   //create a player with the user input data and save it inside the room
-  player = new Player(req.body.name, symbol, playerNumber, hasPlayerTurn);
+  player = new Player(
+    req.body.name,
+    symbol,
+    playerNumber,
+    hasPlayerTurn,
+    false
+  );
   availableRoom.addPlayer(player);
 
   //un-block the room
@@ -205,6 +211,8 @@ async function makeMove(req, res, next) {
   let room;
   try {
     room = await Room.findById(roomId);
+    //handle game restarting requests
+    room.handleGameRestart(playerNumber);
     //make move: might fail if coordinates are not ok, or it's not this player turn
     const player = room.getPlayer(playerNumber);
     room.gameStatus.makeMove(player, coord);
@@ -222,7 +230,6 @@ async function makeMove(req, res, next) {
   responseData.gameStatus = room.gameStatus;
   responseData.playerNumber = playerNumber;
   responseData.gameOverStatus = room.gameStatus.getGameOverStatus();
-  //responseData.gameOverStatus = ??
   res.json(responseData);
 }
 
@@ -244,46 +251,41 @@ async function playAgain(req, res, next) {
     return;
   }
 
-  //room exists: check is game is actually over
   const gameOverStatus = room.gameStatus.getGameOverStatus();
+  const otherPlayerNumber = gameUtil.getOtherPlayerNumber(playerNumber);
+  let isLooserPlayer;
 
-  //only the client who lost the game can reset the game status (board + last move)
-  //when requesting to restart the game. Instead
-  //if we have a draw, only the client who joined first the room can restart the game first
-  const isLooserPlayer =
-    gameOverStatus.isWinner &&
-    gameOverStatus.winnerPlayerNumber !== playerNumber;
-
-  const isWinnerPlayer =
-    gameOverStatus.isWinner &&
-    gameOverStatus.winnerPlayerNumber == playerNumber;
-
-  if (isLooserPlayer) {
-    room.gameStatus.reset();
-    try {
-      await room.save();
-    } catch (error) {
-      next(error);
-      return;
+  if (gameOverStatus.isOver) { //either it is a winner or a draw
+    //init player turn
+    responseData.isYourTurn = false;
+    //check if player is the one who lost the game
+    isLooserPlayer =
+      gameOverStatus.isWinner &&
+      gameOverStatus.winnerPlayerNumber !== playerNumber;
+    if (isLooserPlayer || room.players[playerNumber - 1].hasTurn) {
+      //first turn will be of the looser gamer
+      responseData.isYourTurn = true;
+      //turn on restarting player flags in the room
+      room.initGameRestart();
+      try {
+        await room.save();
+      } catch (error) {
+        next(error);
+        return;
+      }
     }
-    //set and send response data
-    responseData.players = room.players;
-    responseData.gameStatus = room.gameStatus;
-    responseData.playerNumber = playerNumber;
-    responseData.isYourTurn = true;
-    res.json(responseData);
-    return;
-  } else if (isWinnerPlayer) {
-    //set and send response data
-    responseData.players = room.players;
+    //game status data for updating the frontend
     responseData.gameStatus = new GameStatus( //empty game status
       gameUtil.getEmptyBoard(),
       new GameMove(0, [null, null], "null")
     );
-    responseData.playerNumber = playerNumber;
-    responseData.isYourTurn = false;
-    res.json(responseData);
-    return;
+  } else if (
+    room.players[playerNumber - 1].restartingRequest &&
+    !room.players[otherPlayerNumber - 1].restartingRequest
+  ) {
+    //game status containing first move made by the other client
+    responseData.gameStatus = room.gameStatus;
+    responseData.isYourTurn = true;
   } else {
     const error = new Error(
       "An error occured when player tried to re-start the game"
@@ -291,6 +293,12 @@ async function playAgain(req, res, next) {
     next(error);
     return;
   }
+
+  //set and send response data
+  responseData.players = room.players;
+  responseData.playerNumber = playerNumber;
+  res.json(responseData);
+  return;
 }
 
 //export

@@ -36,8 +36,8 @@ class Room {
     const emptyBoard = gameUtil.getEmptyBoard();
     const emptyGameMove = new GameMove(0, [null, null], "null");
     const gameStatus = new GameStatus(emptyBoard, emptyGameMove);
-    const player1 = new Player("", "", 0, false);
-    const player2 = new Player("", "", 0, false);
+    const player1 = new Player("", "", 0, false, false);
+    const player2 = new Player("", "", 0, false, false);
     //create and return the new room
     return new Room(
       [player1, player2],
@@ -170,7 +170,7 @@ class Room {
 
   //update players hasTurn property
   //NOTE: playerNumbe --> number of the player who made successfully a game move
-  //Example: if player 1 made successfully his move, then it is the turn of player 2 
+  //Example: if player 1 made successfully his move, then it is the turn of player 2
   setPlayersTurn(playerNumber) {
     this.players[playerNumber - 1].hasTurn = false;
     const otherPlayerNumber = gameUtil.getOtherPlayerNumber(playerNumber);
@@ -231,6 +231,28 @@ class Room {
     }
   }
 
+  //set game start request
+  initGameRestart() {
+    this.players[0].restartingRequest = true;
+    this.players[1].restartingRequest = true;
+  }
+
+  //handle game restarting requests
+  handleGameRestart(thisPlayerNumber) {
+    const otherPlayerNumber = gameUtil.getOtherPlayerNumber(thisPlayerNumber);
+    //check if players are requesting to restart the game
+    const thisPlayerRestartingRequest =
+      this.players[thisPlayerNumber - 1].restartingRequest;
+    const otherPlayerRestartingRequest =
+      this.players[otherPlayerNumber - 1].restartingRequest;
+    if (thisPlayerRestartingRequest) {
+      this.players[thisPlayerNumber - 1].restartingRequest = false;
+      if (otherPlayerRestartingRequest) {
+        this.gameStatus.reset();
+      }
+    }
+  }
+
   //generate mongodb document from Room class obj
   fromRoomToMongoDBDocument() {
     return {
@@ -245,5 +267,3 @@ class Room {
 
 //export
 module.exports = Room;
-
-
