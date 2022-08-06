@@ -29,7 +29,7 @@
 }
 
 #game-over button {
-  width: 11.7rem;
+  width: 12rem;
   margin: 0 auto;
 }
 
@@ -160,6 +160,14 @@
 
 /* width >= 480px */
 @media (min-width: 480px) {
+  #game-over {
+    padding: 2rem;
+  }
+
+  #game-over h2 {
+    font-size: var(--font-size-7);
+  }
+
   #game-over div {
     flex-direction: row;
     justify-content: center;
@@ -175,10 +183,6 @@
 
   #player2 {
     text-align: left;
-  }
-
-  #game-over {
-    padding: 2rem;
   }
 
   #active-game {
@@ -200,14 +204,13 @@
     flex-direction: row;
     gap: 2rem;
   }
-
-  #game-over h2 {
-    font-size: var(--font-size-7);
-  }
 }
 
 /* width >= 768px */
 @media (min-width: 768px) {
+  #game-over button {
+    height: 4rem;
+  }
   .game-error-message p {
     width: 50%;
   }

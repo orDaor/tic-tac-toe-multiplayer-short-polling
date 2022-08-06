@@ -95,13 +95,23 @@ class Room {
     );
   }
 
-  //find the first available game room
-  static async findAvailableAndBlock() {
+  //find the first available and non-blocked game room
+  //NOTE: the room to look for must be different than the one already assigned
+  //to the session if game data are already present
+  static async findAvailableAndBlock(roomIdToSkip) {
     //define query filter
     const query = {
       available: true,
       blocked: false,
+      owned: false,
     };
+
+    //skip room with passed id
+    if (roomIdToSkip) {
+      query._id = {
+        $ne: new ObjectId(roomIdToSkip),
+      };
+    }
 
     //value to update in the room document
     const update = { $set: { blocked: true } };

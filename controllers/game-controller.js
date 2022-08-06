@@ -51,13 +51,22 @@ async function joinNewRoom(req, res, next) {
     return;
   }
 
+  //check if a room is already assigned to the session
+  const sessionGameData = req.session.gameData;
+  let roomId;
+  if (sessionGameData) {
+    roomId = sessionGameData.roomId;
+  } else {
+    roomId = null;
+  }
+
   //look for an existing available game room
   let availableRoom;
   let playerNumber;
   let symbol;
   let player;
   try {
-    availableRoom = await Room.findAvailableAndBlock();
+    availableRoom = await Room.findAvailableAndBlock(roomId);
   } catch (error) {
     next(error);
     return;
