@@ -3,6 +3,14 @@
 //CSRF token
 const csrfTokenElement = document.querySelector('meta[name="csrf-token"]');
 
+//all buttons for joining a new room (either random room or private room with a friend)
+//NOTE: not included buttons in the form
+const joinNewRoomButtonElements =
+  document.querySelectorAll(".join-new-room-btn");
+
+//game config for choosing the name
+const gameConfigSectionElement = document.getElementById("game-config");
+
 //form
 const formElement = document.querySelector("#game-config form");
 
@@ -11,21 +19,17 @@ const formErrorMessageElement = document.querySelector(
   "#game-config .form-error-message"
 );
 
-//game config for choosing the name
-const gameConfigSectionElement = document.getElementById("game-config");
+//active game board
+const activeGameSectionElement = document.getElementById("active-game");
 
 //game over status
 const gameOverStatusElement = document.getElementById("game-over");
 
-//game over buttons
-const joinNewRoomButtonElement = document.getElementById("join-new-room-btn");
+//game over play again button
 const playAgainButtonElement = document.getElementById("play-again-btn");
-const inviteFriendButtonElement = document.getElementById(
-  "invite-friend-game-over-btn"
-);
 
-//active game board
-const activeGameSectionElement = document.getElementById("active-game");
+//div containing active game buttons
+const activeGameButtonsElement = document.getElementById("active-game-buttons");
 
 //players name
 const playerNameElement1 = document.getElementById("player1");
@@ -75,17 +79,16 @@ const fetchRoomDataConfig = new PeriodicRequestConfig(
 
 //EVENT LISTENERS ---------------------------------------------------------
 
+//either join a random room or private room with a friend (form buttons not included)
+for (const buttonElement of joinNewRoomButtonElements) {
+  buttonElement.addEventListener("click", joinNewRoom);
+}
+
 //for submission for joining a new room
 formElement.addEventListener("submit", joinNewRoom);
 
 //play again with the other player after game over
-joinNewRoomButtonElement.addEventListener("click", joinNewRoom);
-
-//join a new room after game over
 playAgainButtonElement.addEventListener("click", playAgain);
-
-//invite a friend after game over
-inviteFriendButtonElement.addEventListener("click", joinNewRoom);
 
 //hide game error message by clicking on the "X" button
 gameErrorMessageElement

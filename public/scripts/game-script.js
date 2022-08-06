@@ -250,6 +250,17 @@ function hideGameOverStatus() {
   gameOverStatusElement.style.display = "none";
 }
 
+//display active game buttons
+function displayActiveGameButtons() {
+  activeGameButtonsElement.style.display = "block";
+}
+
+//hide active game buttons
+function hideActiveGameButtons() {
+  activeGameButtonsElement.style.display = "none";
+}
+
+
 //show error message in the active game area
 function displayGameErrorMessage(errorMessage) {
   gameErrorMessageElement.style.display = "block";
