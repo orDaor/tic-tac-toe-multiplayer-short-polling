@@ -49,10 +49,13 @@ const activePlayerNameElement = document.getElementById("active-player-name");
 let isMyTurnGlobal = false;
 
 //PERIODIC REQUEST CONFIG OBJECTS ---------------------------------------------------------
+//synchronization period [ms]
+const syncTime = 2000;
+
 //ask the server if another player connected to the room and fetch the data of that player in that case
 const getOnePlayerDataConfig = new PeriodicRequestConfig(
   fetchOnePlayerData, //send
-  2000, // delay [ms]
+  syncTime, // delay [ms]
   false, //stop
   setOtherPlayerData, //resolve
   displayGameErrorMessage //handeError
@@ -61,7 +64,7 @@ const getOnePlayerDataConfig = new PeriodicRequestConfig(
 //ask the server if the other player made his move and fetch actual room status in that case
 const fetchRoomDataConfig = new PeriodicRequestConfig(
   fetchRoomData, //send
-  2000, // delay [ms]
+  syncTime, // delay [ms]
   false, //stop
   startYourTurn, //resolve
   displayGameErrorMessage //handeError

@@ -36,7 +36,12 @@ class GameStatus {
     const rowsNumber = this.board.length;
     const columnsNumber = this.board[0].length;
     const inputsOk =
-      row >= 0 && col >= 0 && row <= rowsNumber && col <= columnsNumber;
+      row &&
+      col &&
+      row >= 1 &&
+      col >= 1 &&
+      row <= rowsNumber &&
+      col <= columnsNumber;
     if (!inputsOk) {
       throw new Error("Matrix coordinates out of range");
     }

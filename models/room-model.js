@@ -11,18 +11,35 @@ const GameMove = require("../models/game-move-model");
 const GameStatus = require("../models/game-status-model");
 
 class Room {
-  constructor(players, gameStatus, creationDate, blocked, roomId) {
+  constructor(
+    players,
+    gameStatus,
+    creationDate,
+    lastChangeDate,
+    blocked,
+    owned,
+    roomId
+  ) {
     this.players = players; //Array[1,2] of class Player
     this.gameStatus = gameStatus; //Object of class GameStatus
     this.available = this.isAvailable();
 
     if (creationDate) {
       this.creationDate = creationDate;
+      if (lastChangeDate) {
+        this.lastChangeDate = lastChangeDate;
+      } else {
+        throw new Error(
+          "A value for lastChangeDate needs to pe passed to the Room constructor if a value for creationDate was passed"
+        );
+      }
     } else {
       this.creationDate = new Date(); //now
+      this.lastChangeDate = this.creationDate;
     }
 
     this.blocked = blocked;
+    this.owned = owned;
 
     if (roomId) {
       this.roomId = roomId.toString();
@@ -42,8 +59,10 @@ class Room {
     return new Room(
       [player1, player2],
       gameStatus,
-      null, //date = now
-      false //not blocked
+      null, //creation date = now
+      null, //last change date = ??
+      false, //not blocked
+      false //owned
       //no room id
     );
   }
@@ -69,7 +88,9 @@ class Room {
       [player1, player2],
       gameStatus,
       document.creationDate,
+      document.lastChangeDate,
       document.blocked,
+      document.owned,
       document._id
     );
   }
@@ -137,6 +158,8 @@ class Room {
 
       //update filter
       const updatedDocument = this.fromRoomToMongoDBDocument();
+      //last change date = now
+      updatedDocument.lastChangeDate = new Date();
       const update = { $set: updatedDocument };
 
       //run query
@@ -260,7 +283,9 @@ class Room {
       gameStatus: this.gameStatus,
       available: this.available,
       creationDate: this.creationDate,
+      lastChangeDate: this.lastChangeDate,
       blocked: this.blocked,
+      owned: this.owned,
     };
   }
 }

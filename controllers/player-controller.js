@@ -12,9 +12,14 @@ async function getOtherPlayerData(req, res, next) {
   //init response data
   let responseData = {};
 
-  //fetch game session fata
-  const roomId = req.session.gameData.roomId;
-  const playerNumber = req.session.gameData.playerNumber;
+  //fetch game session data
+  const sessionGameData = req.session.gameData;
+  if (!sessionGameData) {
+    next(error);
+    return;
+  }
+  const roomId = sessionGameData.roomId;
+  const playerNumber = sessionGameData.playerNumber;
   //find the number of the other player with which the player who sent the request is playing
   const otherPlayerNumber = gameUtil.getOtherPlayerNumber(playerNumber);
 

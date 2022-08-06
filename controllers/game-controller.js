@@ -168,9 +168,14 @@ async function getRoomData(req, res, next) {
   //init response data
   let responseData = {};
 
-  //fetch game session fata
-  const roomId = req.session.gameData.roomId;
-  const playerNumber = req.session.gameData.playerNumber;
+  //fetch game session data
+  const sessionGameData = req.session.gameData;
+  if (!sessionGameData) {
+    next(error);
+    return;
+  }
+  const roomId = sessionGameData.roomId;
+  const playerNumber = sessionGameData.playerNumber;
 
   //fetch room from the DB where client is playing
   let room;
@@ -203,9 +208,14 @@ async function makeMove(req, res, next) {
   //body data
   const coord = req.body.coord; //[row,col]
 
-  //fetch game session fata
-  const roomId = req.session.gameData.roomId;
-  const playerNumber = req.session.gameData.playerNumber;
+  //fetch game session data
+  const sessionGameData = req.session.gameData;
+  if (!sessionGameData) {
+    next(error);
+    return;
+  }
+  const roomId = sessionGameData.roomId;
+  const playerNumber = sessionGameData.playerNumber;
 
   //fetch room from the DB where client is playing
   let room;
@@ -238,9 +248,14 @@ async function playAgain(req, res, next) {
   //init response data
   let responseData = {};
 
-  //fetch game session fata
-  const roomId = req.session.gameData.roomId;
-  const playerNumber = req.session.gameData.playerNumber;
+  //fetch game session data
+  const sessionGameData = req.session.gameData;
+  if (!sessionGameData) {
+    next(error);
+    return;
+  }
+  const roomId = sessionGameData.roomId;
+  const playerNumber = sessionGameData.playerNumber;
 
   //fetch room from the DB where client is playing
   let room;
@@ -253,16 +268,21 @@ async function playAgain(req, res, next) {
 
   const gameOverStatus = room.gameStatus.getGameOverStatus();
   const otherPlayerNumber = gameUtil.getOtherPlayerNumber(playerNumber);
-  let isLooserPlayer;
 
-  if (gameOverStatus.isOver) { //either it is a winner or a draw
+  if (gameOverStatus.isOver) {
+    //either it is a winner or a draw
     //init player turn
     responseData.isYourTurn = false;
     //check if player is the one who lost the game
-    isLooserPlayer =
+    const isLooserPlayer =
       gameOverStatus.isWinner &&
       gameOverStatus.winnerPlayerNumber !== playerNumber;
-    if (isLooserPlayer || room.players[playerNumber - 1].hasTurn) {
+
+    //check if the player had a draw but did not make last move
+    const isDrawAndHasTurn =
+      gameOverStatus.isDraw && room.players[playerNumber - 1].hasTurn;
+
+    if (isLooserPlayer || isDrawAndHasTurn) {
       //first turn will be of the looser gamer
       responseData.isYourTurn = true;
       //turn on restarting player flags in the room
