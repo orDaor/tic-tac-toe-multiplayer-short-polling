@@ -14,32 +14,12 @@ const gameUtil = require("../utils/game-util");
 
 //main game page
 async function getGame(req, res, next) {
-  //fetch game data from the client session
-  const gameSession = req.session.gameData;
-
-  let viewData;
-  if (gameSession) {
-    //fetch game data to be injected in the view
-    try {
-      req.locals.room = await Room.findById(roomId);
-      viewData = {
-        // ...viewUtil.getInitViewData(),
-        ...req.locals.room,
-      };
-    } catch (error) {
-      //send page
-    }
-    //
-  } else {
-    //...
-  }
-
   //response
   res.render("game");
 }
 
 //associate the client as a player number to a new game room
-async function joinNewRoom(req, res, next) {
+async function joinRandomRoom(req, res, next) {
   //init response data
   let responseData = {};
   //validate user input
@@ -333,7 +313,7 @@ async function playAgain(req, res, next) {
 //export
 module.exports = {
   getGame: getGame,
-  joinNewRoom: joinNewRoom,
+  joinRandomRoom: joinRandomRoom,
   getRoomData: getRoomData,
   makeMove: makeMove,
   playAgain: playAgain,

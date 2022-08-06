@@ -37,6 +37,21 @@
   font-weight: bold;
 }
 
+#active-game-buttons {
+  margin: var(--active-game-section-vertical-margin) auto;
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+  justify-content: center;
+  align-items: center;
+}
+
+#active-game-buttons button {
+  padding-left: 1rem;
+  padding-right: 1rem;
+  font-size: var(--font-size-1);
+}
+
 #players-info {
   margin: var(--active-game-section-vertical-margin) auto;
   display: flex;
@@ -45,7 +60,6 @@
   justify-content: center;
   align-items: center;
   font-size: var(--font-size-3);
-  color: var(--color-grey-500);
 }
 
 #players-info .player-name {
@@ -175,6 +189,14 @@
 
   #game-over button {
     margin: 0;
+  }
+
+  #active-game-buttons {
+    gap: 1rem;
+  }
+
+  #active-game-buttons button {
+    font-size: var(--font-size-2);
   }
 
   #player1 {

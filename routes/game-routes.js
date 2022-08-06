@@ -14,7 +14,7 @@ const router = express.Router();
 router.get("/", gameController.getGame);
 
 //create a game session for the client
-router.post("/new", gameController.joinNewRoom);
+router.post("/new", gameController.joinRandomRoom);
 
 //fetch actual game status data
 router.get("/room", gameController.getRoomData);
