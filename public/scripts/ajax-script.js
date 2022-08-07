@@ -28,11 +28,7 @@ async function joinNewRoom(event) {
     //check which button generated the click event
     if (eventTargetElement.classList.contains("join-random-room-btn")) {
       url = `/game/new`;
-    } else if (
-      eventTargetElement.submitterButtonElement.classList.contains(
-        "invite-friend-btn"
-      )
-    ) {
+    } else if (eventTargetElement.classList.contains("invite-friend-btn")) {
       url = `/game/new/friend`;
     }
 

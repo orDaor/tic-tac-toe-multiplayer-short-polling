@@ -10,7 +10,14 @@ async function getGame(req, res, next) {
   res.render("game");
 }
 
+//invitation page
+async function getGameInvitation(req, res, next) {
+  //response
+  res.render("game");
+}
+
 //export
 module.exports = {
   getGame: getGame,
+  getGameInvitation: getGameInvitation,
 };

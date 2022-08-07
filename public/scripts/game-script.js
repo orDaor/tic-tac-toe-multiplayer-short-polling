@@ -7,6 +7,11 @@ function initGame(responseData) {
   displayActiveGameButtons();
   displayGameTurnInfo();
 
+  //check if a private room was created
+  if (responseData.invitationUrl) {
+    displayLinkElement(responseData.invitationUrl);
+  }
+
   //this player name
   playerNameGlobal = responseData.players[responseData.playerNumber - 1].name;
 
@@ -85,6 +90,9 @@ function setOtherPlayerData(player) {
   if (!isMyTurnGlobal) {
     activePlayerNameElement.textContent = player.name;
   }
+
+  //remove div element containing the link
+  removeLinkElement();
 }
 
 //releaze empty (not selected yet) game board elements so that they can be selected again
@@ -266,6 +274,38 @@ function displayActiveGameButtons() {
 //hide active game buttons
 function hideActiveGameButtons() {
   activeGameButtonsElement.style.display = "none";
+}
+
+//generate a div element containing link to be shared with a friend
+function displayLinkElement(url) {
+  //div at the end of active game sectionl
+  const divLinkElement = document.createElement("div");
+  divLinkElement.id = "game-link";
+  divLinkElement.classList.add("form-control");
+  activeGameSectionElement.prepend(divLinkElement);
+  //label inside div
+  const labelLinkElement = document.createElement("label");
+  labelLinkElement.htmlFor = "gameurl";
+  labelLinkElement.textContent = "Share this link with your friend!";
+  divLinkElement.append(labelLinkElement);
+  //input inside the div
+  const inputLinkElement = document.createElement("input");
+  inputLinkElement.id = "gameurl";
+  inputLinkElement.type = "text";
+  inputLinkElement.readOnly = true;
+  if (!url) {
+    inputLinkElement.value = "https://linkforyourfriend";
+  } else {
+    inputLinkElement.value = url;
+  }
+  divLinkElement.append(inputLinkElement);
+}
+
+function removeLinkElement () {
+  const divLinkElement = document.getElementById("game-link");
+  if (divLinkElement) {
+    divLinkElement.parentElement.removeChild(divLinkElement);
+  }
 }
 
 //show error message in the active game area

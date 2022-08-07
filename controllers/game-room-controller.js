@@ -44,7 +44,7 @@ async function joinRandomRoom(req, res, next) {
 
   //if no available room was found, create a new one
   if (!availableRoom) {
-    const newRoom = Room.createEmpty();
+    const newRoom = Room.createEmpty(false);
 
     //find a player number and symbol for the client
     playerNumber = newRoom.getAvailablePlayerSlot(); //default = 1 in an empty room
@@ -155,7 +155,7 @@ async function createAndJoinPrivateRoom(req, res, next) {
     return;
   }
 
-  const newRoom = Room.createEmpty();
+  const newRoom = Room.createEmpty(true); //private room
 
   //find a player number and symbol for the client
   playerNumber = newRoom.getAvailablePlayerSlot(); //default = 1 in an empty room
@@ -188,7 +188,7 @@ async function createAndJoinPrivateRoom(req, res, next) {
   responseData.gameStatus = newRoom.gameStatus;
   responseData.playerNumber = playerNumber;
   responseData.isYourTurn = true;
-  responseData.invitationUrl = `http://localhost:3000/game/friend/${newRoom.roomId}`;
+  responseData.invitationUrl = `http://localhost:3000/game/new/friend/${newRoom.roomId}`;
   res.json(responseData);
   return;
 }

@@ -48,7 +48,7 @@ class Room {
 
   //create a new Room object, initialized for a player requesting a new game session
   //(this is used in case no available room in the DB was found
-  static createEmpty() {
+  static createEmpty(isPrivate) {
     //init the values of the new room
     const emptyBoard = gameUtil.getEmptyBoard();
     const emptyGameMove = new GameMove(0, [null, null], "null");
@@ -62,7 +62,7 @@ class Room {
       null, //creation date = now
       null, //last change date = ??
       false, //not blocked
-      false //owned
+      isPrivate //owned
       //no room id
     );
   }
