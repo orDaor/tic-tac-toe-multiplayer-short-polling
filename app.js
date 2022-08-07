@@ -13,8 +13,10 @@ const addCsrfTokenMiddleware = require("./middlewares/csrf-token-middleware");
 const notFoundMidlleware = require("./middlewares/not-found-middleware");
 const errorHandlingMiddleware = require("./middlewares/error-handling-middleware");
 const baseRoutes = require("./routes/base-routes");
+const gameConfigRoutes = require("./routes/game-config-routes");
+const gameRoomRoutes = require("./routes/game-room-routes");
+const gamePlayRoutes = require("./routes/game-play-routes");
 const playerRoutes = require("./routes/player-routes");
-const gameRoutes = require("./routes/game-routes");
 
 //create express app
 const app = express();
@@ -44,7 +46,9 @@ app.use(addCsrfTokenMiddleware);
 
 //routes registration
 app.use(baseRoutes);
-app.use("/game", gameRoutes);
+app.use("/game", gameConfigRoutes);
+app.use("/game", gameRoomRoutes);
+app.use("/game", gamePlayRoutes);
 app.use("/player", playerRoutes);
 
 //not found middleware
