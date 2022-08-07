@@ -25,5 +25,11 @@ router.post("/status", gameController.makeMove);
 //restart the game with the other player
 router.post("/restart", gameController.playAgain);
 
+//create and join a new private room where to invite a friend
+router.post("/new/friend", gameController.createAndJoinPrivateRoom);
+
+//join a private room from a friend invitation
+router.get("/new/friend", gameController.joinPrivateRoom);
+
 //export
 module.exports = router;

@@ -1,17 +1,49 @@
 //send request to create a new game session
 async function joinNewRoom(event) {
-  //prevent form from being submitted
-  event.preventDefault();
+  //init ajax request data
+  let url;
+  let body;
+  let response;
 
-  //extract form input value
-  const formData = new FormData(event.target);
-  const playerData = {
-    name: formData.get("playername"),
-  };
+  //check whether event is form submission or button click
+  const eventTargetElement = event.target;
+  if (eventTargetElement.tagName === "FORM") {
+    //prevent form from being submitted
+    event.preventDefault();
+
+    //check which button generated form submission event
+    const submitterButtonElement = event.submitter;
+    if (submitterButtonElement.classList.contains("join-random-room-btn")) {
+      url = `/game/new`;
+    } else if (submitterButtonElement.classList.contains("invite-friend-btn")) {
+      url = `/game/new/friend`;
+    }
+
+    //extract form input value for the body message
+    const formData = new FormData(eventTargetElement);
+    body = {
+      name: formData.get("playername"),
+    };
+  } else if (eventTargetElement.tagName === "BUTTON") {
+    //check which button generated the click event
+    if (eventTargetElement.classList.contains("join-random-room-btn")) {
+      url = `/game/new`;
+    } else if (
+      eventTargetElement.submitterButtonElement.classList.contains(
+        "invite-friend-btn"
+      )
+    ) {
+      url = `/game/new/friend`;
+    }
+
+    //the player name is the current one
+    body = {
+      name: playerNameGlobal,
+    };
+  }
 
   //config ajax POST request to create a game session in the server for this client
-  let response = {};
-  const url = `/game/new`;
+
   const requestConfig = {
     method: "POST",
     headers: {
@@ -19,7 +51,7 @@ async function joinNewRoom(event) {
       "Content-Type": "application/json",
       "CSRF-Token": csrfTokenElement.content,
     },
-    body: JSON.stringify(playerData),
+    body: JSON.stringify(body),
   };
 
   //send ajax request

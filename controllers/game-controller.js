@@ -310,6 +310,16 @@ async function playAgain(req, res, next) {
   return;
 }
 
+//create and join a new private room where to invite a friend
+async function createAndJoinPrivateRoom(req, res, next) {
+
+}
+
+//join a private room from a friend invitation
+async function joinPrivateRoom(req, res, next) {
+  
+}
+
 //export
 module.exports = {
   getGame: getGame,
@@ -317,4 +327,6 @@ module.exports = {
   getRoomData: getRoomData,
   makeMove: makeMove,
   playAgain: playAgain,
+  createAndJoinPrivateRoom: createAndJoinPrivateRoom,
+  joinPrivateRoom: joinPrivateRoom,
 };

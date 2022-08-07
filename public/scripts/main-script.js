@@ -55,6 +55,8 @@ const activePlayerNameElement = document.getElementById("active-player-name");
 //GLOBAL FLAGS---------------------------------------------------------
 let isMyTurnGlobal = false;
 
+let playerNameGlobal = "";
+
 //PERIODIC REQUEST CONFIG OBJECTS ---------------------------------------------------------
 //synchronization period [ms]
 const syncTime = 2000;

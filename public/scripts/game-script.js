@@ -4,7 +4,11 @@ function initGame(responseData) {
   hideGameConfigSection();
   displayActiveGameSection();
   hideGameOverStatus();
+  displayActiveGameButtons();
   displayGameTurnInfo();
+
+  //this player name
+  playerNameGlobal = responseData.players[responseData.playerNumber - 1].name;
 
   //set the player names using server response data
   setPlayersData(responseData.players);
@@ -14,6 +18,8 @@ function initGame(responseData) {
 
   //decide whether the client can start playing depending on whether it is its turn or not
   const otherPlayerNumber = getOtherPlayerNumber(responseData.playerNumber);
+
+  //check whether is my turn or not
   if (responseData.isYourTurn) {
     isMyTurnGlobal = true;
     setActivePlayerName(isMyTurnGlobal);
@@ -140,6 +146,7 @@ function startYourTurn(updatedRoom) {
     isMyTurnGlobal = false;
     displayGameOverStatus();
     setGameOverStatus(!gameOverStatus.isWinner, gameOverStatus.isDraw);
+    hideActiveGameButtons();
     hideGameTurnInfo();
     return;
   }
@@ -160,6 +167,7 @@ function finishYourTurn(updatedRoom) {
   if (gameOverStatus.isOver) {
     displayGameOverStatus();
     setGameOverStatus(gameOverStatus.isWinner, gameOverStatus.isDraw);
+    hideActiveGameButtons();
     hideGameTurnInfo();
     return;
   }
@@ -259,7 +267,6 @@ function displayActiveGameButtons() {
 function hideActiveGameButtons() {
   activeGameButtonsElement.style.display = "none";
 }
-
 
 //show error message in the active game area
 function displayGameErrorMessage(errorMessage) {
