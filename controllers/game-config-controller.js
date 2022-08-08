@@ -3,17 +3,79 @@
 //inports 3rd party
 
 //imports custom
+const Room = require("../models/room-model");
+const viewData = require("../models/view-data-model");
+const gameUtil = require("../utils/game-util");
 
 //main game page
 async function getGame(req, res, next) {
-  //response
-  res.render("game");
+  //render template where user can enter his name for joinin a random room
+  res.render("game", {
+    viewData: new viewData(), //default meaningless room data
+    isInvited: false,
+    roomId: null,
+    hostPlayerName: "",
+  });
 }
 
 //invitation page
 async function getGameInvitation(req, res, next) {
-  //response
-  res.render("game");
+  //requested private room id
+  const roomId = req.params.roomId;
+
+  //game session data
+  const sessionGameData = req.session.gameData;
+
+  let room;
+  try {
+    //check if room exissts
+    room = await Room.findById(roomId);
+    //check if room is actually private
+    if (!room.owned) {
+      throw new Error("User requested to join a non private room");
+    } else {
+      //check if user is trying to access a non available (full) room where already two users
+      //are playing there, and none of the is the user
+      if (sessionGameData) {
+        if (!room.available && sessionGameData.roomId !== roomId) {
+          throw new Error(
+            "User requested to join a private room, but the room is already full"
+          );
+        }
+      } else if (!room.available) {
+        throw new Error(
+          "User requested to join a private room, but the room is already full"
+        );
+      }
+    }
+  } catch (error) {
+    next(error);
+    return;
+  }
+
+  //player is alredy assigned the requested room
+  if (sessionGameData) {
+    if (sessionGameData.roomId === roomId) {
+      //render template where user can continues the game in the room which he is already assigned to
+      res.render("game", {
+        viewData: new viewData(room, sessionGameData.playerNumber), //actual room data
+        isInvited: false,
+        roomId: null,
+        hostPlayerName: "",
+      });
+      return;
+    }
+  }
+
+  //render template where user can enter his name for joinin the new room which he is NOT already assigned to
+  const availablePlayerSlot = room.getAvailablePlayerSlot();
+  const hostPlayerNumber = gameUtil.getOtherPlayerNumber(availablePlayerSlot);
+  res.render("game", {
+    viewData: new viewData(), //default meaningless room data
+    isInvited: true,
+    roomId: roomId,
+    hostPlayerName: room.players[hostPlayerNumber - 1].name,
+  });
 }
 
 //export

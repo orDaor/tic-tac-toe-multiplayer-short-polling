@@ -14,7 +14,7 @@ const router = express.Router();
 router.get("/", gameConfigController.getGame);
 
 //get the page from the invitation link by a friend
-router.get("/:roomId", gameConfigController.getGameInvitation);
+router.get("/new/friend/:roomId", gameConfigController.getGameInvitation);
 
 //export
 module.exports = router;

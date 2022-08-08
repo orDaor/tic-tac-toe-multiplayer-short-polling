@@ -17,7 +17,7 @@ router.post("/new", gameRoomController.joinRandomRoom);
 router.post("/new/friend", gameRoomController.createAndJoinPrivateRoom);
 
 //join a private room from a friend invitation
-router.post("/:roomId", gameRoomController.joinPrivateRoom);
+router.post("/new/friend/:roomId", gameRoomController.joinPrivateRoom);
 
 //export
 module.exports = router;

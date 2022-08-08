@@ -5,6 +5,7 @@
 //imports custom
 const Room = require("./room-model");
 const GameStatus = require("./game-status-model");
+const Player = require("./player-model");
 const GameMove = require("./game-move-model");
 const GameBoardCellData = require("./game-board-cell-data-model");
 const gameUtil = require("../utils/game-util");
@@ -14,24 +15,34 @@ class ViewData {
     //if a room is passed with no player number, then return an error because
     //the output room data are built here relative to the player who is requesting such room data,
     //and which is currently playing inside this room
-    if(room && !playerNumber) {
+    if (room && !playerNumber) {
       throw new Error("Player number parameter is missing");
     }
 
-    //room game status
+    //room game status and players
     let gameStatus;
+    let players;
     if (room) {
       gameStatus = room.gameStatus;
+      players = room.players;
     } else {
+      //dummy values
+      playerNumber = 1;
       gameStatus = new GameStatus(
         gameUtil.getEmptyBoard(),
         new GameMove(0, [null, null], "null")
       );
+      players = [
+        new Player("", "", 0, false, false),
+        new Player("", "", 0, false, false),
+      ];
     }
 
     //check what player has the turn in this room
     const gameTurn = gameStatus.getCurrentTurn();
-    const isYourTurn = gameTurn === playerNumber;
+    const isYourTurn =
+      (gameTurn && gameTurn === playerNumber) ||
+      (!gameTurn && players[playerNumber - 1].hasTurn);
 
     //game board data
     const board = gameStatus.board;
@@ -43,7 +54,6 @@ class ViewData {
     //create view data based on an existing room data
     //NOTE: playerNumber: player number of the client requesting this view
     if (room) {
-      const players = room.players;
       const gameOverStatus = gameStatus.getGameOverStatus();
       //show the game UI and hide the config section
       this.gameConfigDisplay = "none";

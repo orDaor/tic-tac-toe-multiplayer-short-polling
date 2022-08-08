@@ -1,4 +1,4 @@
-<section id="game-config">
+<section id="game-config" style="display: <%= viewData.gameConfigDisplay %>;">
   <form>
     <div class="form-control">
       <div>
@@ -10,12 +10,18 @@
       <p>Form error message</p>
     </div>
     <div class="form-buttons">
-      <button class="btn join-random-room-btn" type="submit">
-        Random Room
-      </button>
-      <button class="btn btn-alt invite-friend-btn" type="submit">
-        Invite Friend!
-      </button>
+      <% if (isInvited) { %> 
+        <button data-roomId="<%= roomId %>" class="btn join-friend-room-btn" type="submit">
+          Play with <%= hostPlayerName %>!
+        </button>
+      <% } else { %> 
+        <button class="btn join-random-room-btn" type="submit">
+          Random Room
+        </button>
+        <button class="btn btn-alt invite-friend-btn" type="submit">
+          Invite Friend!
+        </button>
+      <% } %> 
     </div>
   </form>
 </section>

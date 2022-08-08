@@ -21,7 +21,7 @@ async function joinRandomRoom(req, res, next) {
     return;
   }
 
-  //check if a room is already assigned to the session
+  //check if a room is already assigned to the room
   const sessionGameData = req.session.gameData;
   let roomId;
   if (sessionGameData) {
