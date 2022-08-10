@@ -3,6 +3,22 @@
 //CSRF token
 const csrfTokenElement = document.querySelector('meta[name="csrf-token"]');
 
+//room and player status info - useful for the client to continue the game in his private room
+const isMyTurnElement = document.querySelector('meta[name="is-my-turn"]');
+const myPlayerNameElement = document.querySelector(
+  'meta[name="my-player-name"]'
+);
+const continueGameElement = document.querySelector(
+  'meta[name="continue-game"]'
+);
+const isGameOverElement = document.querySelector('meta[name="is-game-over"]');
+const invitationUrlElement = document.querySelector(
+  'meta[name="invitation-url"]'
+);
+const isOtherPlayerConnectedElement = document.querySelector(
+  'meta[name="is-other-player-connected"]'
+);
+
 //all buttons for joining a new room (either random room or private room with a friend)
 //NOTE: not included buttons in the form
 const joinNewRoomButtonElements =
@@ -52,11 +68,6 @@ const gameTurnInfo = document.getElementById("game-turn");
 //name of the player who has his turn
 const activePlayerNameElement = document.getElementById("active-player-name");
 
-//GLOBAL FLAGS---------------------------------------------------------
-let isMyTurnGlobal = false;
-
-let playerNameGlobal = "";
-
 //PERIODIC REQUEST CONFIG OBJECTS ---------------------------------------------------------
 //synchronization period [ms]
 const syncTime = 2000;
@@ -78,6 +89,35 @@ const fetchRoomDataConfig = new PeriodicRequestConfig(
   startYourTurn, //resolve
   displayGameErrorMessage //handeError
 );
+
+//GLOBAL FLAGS AND PERIODIC REQUEST INITIALIZATION---------------------------------------------------------
+let isMyTurnGlobal;
+if (isMyTurnElement.content === "true") {
+  isMyTurnGlobal = true;
+} else if (isMyTurnElement.content === "false") {
+  isMyTurnGlobal = false;
+  if (
+    continueGameElement.content === "true" &&
+    isGameOverElement.content === "false"
+  ) {
+    //start fetching game status
+    sendPeriodicRequest(fetchRoomDataConfig);
+  }
+}
+
+//start fetching the other player data if it is not connected yet to the room
+if (isOtherPlayerConnectedElement.content === "false") {
+  if (continueGameElement.content === "true") {
+    sendPeriodicRequest(getOnePlayerDataConfig);
+  }
+}
+
+let playerNameGlobal = myPlayerNameElement.content;
+
+//LINK ELEMENT FOR INVITATION initialization ---------------------------------------------------------
+if (invitationUrlElement.content && isGameOverElement.content === "false") {
+  displayLinkElement(invitationUrlElement.content);
+}
 
 //EVENT LISTENERS ---------------------------------------------------------
 

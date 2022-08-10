@@ -65,11 +65,30 @@ class ViewData {
       this.player1Symbol = players[0].symbol;
       this.player2Symbol = players[1].symbol;
 
+      //other player number with which client is playing
+      const otherPlayerNumber = gameUtil.getOtherPlayerNumber(playerNumber);
+      this.isOtherPlayerConnected =
+        !room.isPlayerSlotAvailable(otherPlayerNumber);
+
       //game turn
       this.isYourTurn = isYourTurn;
 
+      //name of the player requesting this room data
+      this.yourPlayerName = players[playerNumber - 1].name;
+
+      //player is asking for continuing the game in this room
+      this.continueGame = true;
+
+      //room url for private (owned) room
+      if (!this.isOtherPlayerConnected) {
+        this.invitationUrl = `http://localhost:3000/game/new/friend/${room.roomId}`;
+      } else {
+        this.invitationUrl = "";
+      }
+
       if (!gameOverStatus.isOver) {
         //game is not over yet...
+        this.isGameOver = false;
         this.gameOverStatusDisplay = "none";
         this.gameTurnInfoDisplay = "block";
         this.gameOverStatusText = "Game over status text";
@@ -78,8 +97,6 @@ class ViewData {
           this.activePlayerName = "YOUR";
           this.activePlayerNameNextSibling = "";
         } else {
-          //other player number with which client is playing
-          const otherPlayerNumber = gameUtil.getOtherPlayerNumber(playerNumber);
           if (room.isPlayerSlotAvailable(otherPlayerNumber)) {
             this.activePlayerName = "Other Player";
           } else {
@@ -89,16 +106,18 @@ class ViewData {
         }
       } else {
         //game is over...
+        this.isGameOver = true;
         this.gameOverStatusDisplay = "block";
         this.gameTurnInfoDisplay = "none";
         this.activePlayerName = "Active Player Name";
         this.activePlayerNameNextSibling = "'s";
+        this.activeGameButtonsDisplay = "none";
         //check is game is over because of a winner or a draw
         if (gameOverStatus.isWinner) {
           if (gameOverStatus.winnerPlayerNumber === playerNumber) {
             this.gameOverStatusText = "You WON!";
           } else {
-            this.gameOverStatusText = "You LOST";
+            this.gameOverStatusText = "You LOST!";
           }
         } else {
           this.gameOverStatusText = "It's a DRAW";
@@ -125,10 +144,11 @@ class ViewData {
           );
         }
       }
+
       return;
     }
 
-    //if no room data then create default view data
+    //if no room data then create default dummy view data
     this.gameConfigDisplay = "block";
     this.activeGameDisplay = "none";
     this.gameOverStatusDisplay = "none";
@@ -138,9 +158,15 @@ class ViewData {
     this.player2Name = "Player 2 Name";
     this.player1Symbol = "";
     this.player2Symbol = "";
+    this.isOtherPlayerConnected = false;
     this.activePlayerName = "Active Player Name";
     this.activePlayerNameNextSibling = "'s";
+    this.activeGameButtonsDisplay = "none";
     this.isYourTurn = false;
+    this.yourPlayerName = "";
+    this.continueGame = false;
+    this.isGameOver = true;
+    this.invitationUrl = "";
     //create a list of empty cells
     for (let i = 0; i < boardRowsNumber; i++) {
       for (let j = 0; j < boardColumnsNumber; j++) {

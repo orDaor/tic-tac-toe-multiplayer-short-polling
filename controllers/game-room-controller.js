@@ -158,11 +158,11 @@ async function createAndJoinPrivateRoom(req, res, next) {
   const newRoom = Room.createEmpty(true); //private room
 
   //find a player number and symbol for the client
-  playerNumber = newRoom.getAvailablePlayerSlot(); //default = 1 in an empty room
-  symbol = newRoom.getAvailableGameSymbol(); //default = X in an empty room
+  const playerNumber = newRoom.getAvailablePlayerSlot(); //default = 1 in an empty room
+  const symbol = newRoom.getAvailableGameSymbol(); //default = X in an empty room
 
   //create a player with the user input data and save it inside the room
-  player = new Player(req.body.name, symbol, playerNumber, true, false);
+  const player = new Player(req.body.name, symbol, playerNumber, true, false);
   newRoom.addPlayer(player);
 
   //save the new created room in the DB
@@ -194,7 +194,73 @@ async function createAndJoinPrivateRoom(req, res, next) {
 }
 
 //join a private room from a friend invitation
-async function joinPrivateRoom(req, res, next) {}
+async function joinPrivateRoom(req, res, next) {
+  //init response
+  let responseData = {};
+
+  //requested room to join
+  const roomId = req.params.roomId;
+
+  //game session data
+  const sessionGameData = req.session.gameData;
+
+  //validate user input
+  if (!validation.isUserInputValid(req.body)) {
+    responseData.message =
+      "Please choose a valid name with at least 3 characters";
+    responseData.inputNotValid = true;
+    res.json(responseData);
+    return;
+  }
+
+  //check whether the client is allowed to join this private room
+  let room;
+  try {
+    room = await Room.findByIdAndCheckAccessRights(roomId, sessionGameData);
+  } catch (error) {
+    next(error);
+    return;
+  }
+
+  //find a player number and symbol for the client
+  const playerNumber = room.getAvailablePlayerSlot();
+  const symbol = room.getAvailableGameSymbol();
+
+  //check whether the other player already made his move and
+  //set turn of the client accordingly
+  let hasPlayerTurn;
+  if (room.gameStatus.getCurrentTurn()) {
+    hasPlayerTurn = true;
+  } else {
+    hasPlayerTurn = false;
+  }
+
+  //create a player with the user input data and save it inside the room
+  const player = new Player(req.body.name, symbol, playerNumber, hasPlayerTurn, false);
+  room.addPlayer(player);
+
+  //save the new created room in the DB
+  try {
+    await room.save();
+  } catch (error) {
+    next(error);
+    return;
+  }
+
+  //map the client to the saved room by its session
+  sessionUtil.saveGameSession(req, {
+    roomId: room.roomId,
+    playerNumber: playerNumber,
+  });
+
+  //set and send response data
+  responseData.players = room.players;
+  responseData.gameStatus = room.gameStatus;
+  responseData.playerNumber = playerNumber;
+  responseData.isYourTurn = hasPlayerTurn;
+  res.json(responseData);
+  return;
+}
 
 //export
 module.exports = {

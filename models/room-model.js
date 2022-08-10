@@ -145,6 +145,31 @@ class Room {
     return Room.fromMongoDBDocumentToRoom(document); //still returns undefined if no document is found
   }
 
+  //check whether a client can be assigned or access this room based on the game data of his session
+  static async findByIdAndCheckAccessRights(roomId, sessionGameData) {
+    //check if room exissts
+    const room = await Room.findById(roomId);
+    //check if room is actually private
+    if (!room.owned) {
+      throw new Error("User requested to join a non private room");
+    } else {
+      //check if user is trying to access a non available (full) room where already two users
+      //are playing there, and none of the is the user
+      if (sessionGameData) {
+        if (!room.available && sessionGameData.roomId !== roomId) {
+          throw new Error(
+            "User requested to join a private room, but the room is already full"
+          );
+        }
+      } else if (!room.available) {
+        throw new Error(
+          "User requested to join a private room, but the room is already full"
+        );
+      }
+    }
+    return room;
+  }
+
   //check if room is available (at leas 1 player slot is available)
   isAvailable() {
     //update room availability status

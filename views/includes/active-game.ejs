@@ -11,11 +11,25 @@
       </button>
     </div>
   </article>
+
   <div id="players-info">
-    <p id="player1" class="player-name"><%= viewData.player1Name %> (<%= viewData.player1Symbol %>)</p>
+    <p id="player1" class="player-name">
+      <% if (viewData.player1Name) { %> 
+        <%= viewData.player1Name %> (<%= viewData.player1Symbol %>)
+      <% } else { %> 
+        Waiting...
+      <% } %> 
+    </p>
     <p>vs</p>
-    <p id="player2" class="player-name"><%= viewData.player2Name %> (<%= viewData.player2Symbol %>)</p>
+    <p id="player2" class="player-name">
+      <% if (viewData.player2Name) { %> 
+        <%= viewData.player2Name %> (<%= viewData.player2Symbol %>)
+      <% } else { %> 
+        Waiting...
+      <% } %> 
+    </p>
   </div>
+  
   <div class="game-error-message">
     <p>
       <span>Game error message</span>
@@ -24,9 +38,7 @@
   </div>
   <ol id="game-board">
     <% for (const cell of viewData.boardCellsList) { %> 
-      <li data-row="<%= cell.row %>" data-col="<%= cell.col %>" class="<%= cell.cssClass %>">
-        <%= cell.symbol %>
-      </li>
+      <li data-row="<%= cell.row %>" data-col="<%= cell.col %>" class="<%= cell.cssClass %>"><%= cell.symbol %></li>
     <% } %> 
   </ol>
   <div id="game-turn" style="display: <%= viewData.gameTurnInfoDisplay %>;">
@@ -35,7 +47,7 @@
       ><span><%= viewData.activePlayerNameNextSibling %></span> turn!
     </p>
   </div>
-  <div id="active-game-buttons">
+  <div id="active-game-buttons" style="display: <%= viewData.activeGameButtonsDisplay %>;">
     <button class="btn join-random-room-btn join-new-room-btn">New Room</button>
     <button class="btn invite-friend-btn join-new-room-btn">
       Invite Friend

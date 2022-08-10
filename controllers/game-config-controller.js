@@ -28,26 +28,7 @@ async function getGameInvitation(req, res, next) {
 
   let room;
   try {
-    //check if room exissts
-    room = await Room.findById(roomId);
-    //check if room is actually private
-    if (!room.owned) {
-      throw new Error("User requested to join a non private room");
-    } else {
-      //check if user is trying to access a non available (full) room where already two users
-      //are playing there, and none of the is the user
-      if (sessionGameData) {
-        if (!room.available && sessionGameData.roomId !== roomId) {
-          throw new Error(
-            "User requested to join a private room, but the room is already full"
-          );
-        }
-      } else if (!room.available) {
-        throw new Error(
-          "User requested to join a private room, but the room is already full"
-        );
-      }
-    }
+    room = await Room.findByIdAndCheckAccessRights(roomId, sessionGameData);
   } catch (error) {
     next(error);
     return;

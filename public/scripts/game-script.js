@@ -278,6 +278,8 @@ function hideActiveGameButtons() {
 
 //generate a div element containing link to be shared with a friend
 function displayLinkElement(url) {
+  //delete old game link div if it exists
+  removeLinkElement();
   //div at the end of active game sectionl
   const divLinkElement = document.createElement("div");
   divLinkElement.id = "game-link";
@@ -301,7 +303,7 @@ function displayLinkElement(url) {
   divLinkElement.append(inputLinkElement);
 }
 
-function removeLinkElement () {
+function removeLinkElement() {
   const divLinkElement = document.getElementById("game-link");
   if (divLinkElement) {
     divLinkElement.parentElement.removeChild(divLinkElement);

@@ -3,6 +3,12 @@
   <head>
     <%- include("includes/head") %>
     <meta name="csrf-token" content="<%= locals.csrfToken %>">
+    <meta name="my-player-name" content="<%= viewData.yourPlayerName %>">
+    <meta name="is-my-turn" content="<%= viewData.isYourTurn %>">
+    <meta name="continue-game" content="<%= viewData.continueGame %>">
+    <meta name="is-game-over" content="<%= viewData.isGameOver %>">
+    <meta name="invitation-url" content="<%= viewData.invitationUrl %>">
+    <meta name="is-other-player-connected" content="<%= viewData.isOtherPlayerConnected %>">
     <link rel="stylesheet" href="/styles/form.css" />
     <link rel="stylesheet" href="/styles/configuration.css" />
     <link rel="stylesheet" href="/styles/game.css" />

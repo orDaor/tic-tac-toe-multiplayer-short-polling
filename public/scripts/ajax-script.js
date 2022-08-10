@@ -17,6 +17,11 @@ async function joinNewRoom(event) {
       url = `/game/new`;
     } else if (submitterButtonElement.classList.contains("invite-friend-btn")) {
       url = `/game/new/friend`;
+    } else if (
+      submitterButtonElement.classList.contains("join-friend-room-btn")
+    ) {
+      const roomId = submitterButtonElement.dataset.roomid;
+      url = `/game/new/friend/${roomId}`;
     }
 
     //extract form input value for the body message
@@ -122,7 +127,8 @@ async function makeGameMove(event) {
     clickedElement.tagName !== "LI" ||
     !isMyTurnGlobal ||
     clickedElement.textContent ||
-    clickedElement.classList.contains("selected")
+    clickedElement.classList.contains("selected") ||
+    clickedElement.classList.contains("not-selectable")
   ) {
     return;
   }
