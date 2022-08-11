@@ -61,6 +61,11 @@ body {
   max-width: var(--max-width-content);
 }
 
+#main-header a {
+  color: white;
+  text-decoration: none;
+}
+
 #main-header h1 {
   font-size: var(--font-size-4);
 }
