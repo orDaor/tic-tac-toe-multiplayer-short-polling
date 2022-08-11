@@ -173,7 +173,7 @@ async function makeGameMove(event) {
 
   //response ok, update board on screen with updated received game status
   //and switch to other player turn
-  finishYourTurn(responseData);
+  finishTurn(responseData);
 }
 
 //send request to start a new game with the other player

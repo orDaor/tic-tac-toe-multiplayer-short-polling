@@ -13,10 +13,26 @@
 #game-link label,
 #game-link input {
   font-size: var(--font-size-2);
+  text-align: left;
 }
 
 #game-link input {
   width: 90%;
+}
+
+.game-link-control {
+  padding: 0 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+}
+
+.game-link-button {
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 #game-over {
@@ -50,27 +66,6 @@
 
 #game-over button.btn-alt {
   font-weight: bold;
-}
-
-#active-game-buttons {
-  margin: var(--active-game-section-vertical-margin) auto;
-  padding: 0 1rem;
-  display: flex;
-  flex-direction: row;
-  gap: 0.5rem;
-  justify-content: center;
-}
-
-#active-game-buttons button {
-  padding-left: 1rem;
-  padding-right: 1rem;
-  font-size: var(--font-size-1);
-  width: 100%;
-}
-
-#active-game-buttons #change-name-link {
-  color: white;
-  text-decoration: none;
 }
 
 #players-info {
@@ -193,6 +188,27 @@
 #active-player-name {
   font-weight: bold;
   color: var(--color-primary-700);
+}
+
+#active-game-buttons {
+  margin: var(--active-game-section-vertical-margin) auto;
+  padding: 0 1rem;
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+  justify-content: center;
+}
+
+#active-game-buttons button {
+  padding-left: 1rem;
+  padding-right: 1rem;
+  font-size: var(--font-size-1);
+  width: 100%;
+}
+
+#active-game-buttons #change-name-link {
+  color: white;
+  text-decoration: none;
 }
 
 /* width >= 480px */

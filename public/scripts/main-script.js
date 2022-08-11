@@ -86,7 +86,7 @@ const fetchRoomDataConfig = new PeriodicRequestConfig(
   fetchRoomData, //send
   syncTime, // delay [ms]
   false, //stop
-  startYourTurn, //resolve
+  startTurn, //resolve
   displayGameErrorMessage //handeError
 );
 
