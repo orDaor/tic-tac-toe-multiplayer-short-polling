@@ -101,7 +101,7 @@
   box-sizing: border-box;
   display: flex;
   flex-direction: row;
-  justify-content: center;
+  justify-content: space-between;
   gap: 2rem;
   padding: 1.2rem;
   margin: 0 auto;
@@ -232,7 +232,6 @@
   .game-error-message p {
     font-size: var(--font-size-1);
     width: 60%;
-    gap: 3rem;
   }
 
   #game-board {
