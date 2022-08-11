@@ -14,7 +14,7 @@
 
   <div id="players-info">
     <p id="player1" class="player-name">
-      <% if (viewData.player1Name) { %> 
+      <% if (viewData.player1Name && viewData.player1Symbol && viewData.player1Number) { %> 
         <%= viewData.player1Name %> (<%= viewData.player1Symbol %>)
       <% } else { %> 
         Waiting...
@@ -22,7 +22,7 @@
     </p>
     <p>vs</p>
     <p id="player2" class="player-name">
-      <% if (viewData.player2Name) { %> 
+      <% if (viewData.player2Name && viewData.player2Symbol && viewData.player2Number) { %> 
         <%= viewData.player2Name %> (<%= viewData.player2Symbol %>)
       <% } else { %> 
         Waiting...

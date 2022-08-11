@@ -130,10 +130,12 @@ async function playAgain(req, res, next) {
     if (isLooserPlayer || isDrawAndHasTurn) {
       //first turn will be of the looser gamer
       responseData.isYourTurn = true;
-      //turn on restarting player flags in the room
-      room.initGameRestart();
       try {
-        await room.save();
+        if (!room.isGameRestartInitialized()) {
+          //turn on restarting player flags in the room
+          room.initGameRestart();
+          await room.save();
+        }
       } catch (error) {
         next(error);
         return;

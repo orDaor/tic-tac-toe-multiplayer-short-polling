@@ -59,11 +59,13 @@ class ViewData {
       this.gameConfigDisplay = "none";
       this.activeGameDisplay = "block";
 
-      //set player names and symbols
+      //set player names, symbols and number
       this.player1Name = players[0].name;
       this.player2Name = players[1].name;
       this.player1Symbol = players[0].symbol;
       this.player2Symbol = players[1].symbol;
+      this.player1Number = players[0].number;
+      this.player2Number = players[1].number;
 
       //other player number with which client is playing
       const otherPlayerNumber = gameUtil.getOtherPlayerNumber(playerNumber);
@@ -92,6 +94,7 @@ class ViewData {
         this.gameOverStatusDisplay = "none";
         this.gameTurnInfoDisplay = "block";
         this.gameOverStatusText = "Game over status text";
+        this.activeGameButtonsDisplay = "flex";
         //set the active player name based on current player turn
         if (isYourTurn) {
           this.activePlayerName = "YOUR";
@@ -120,7 +123,7 @@ class ViewData {
             this.gameOverStatusText = "You LOST!";
           }
         } else {
-          this.gameOverStatusText = "It's a DRAW";
+          this.gameOverStatusText = "It's a DRAW!";
         }
       }
 
@@ -158,10 +161,12 @@ class ViewData {
     this.player2Name = "Player 2 Name";
     this.player1Symbol = "";
     this.player2Symbol = "";
+    this.player1Number = 0;
+    this.player2Number = 0;
     this.isOtherPlayerConnected = false;
     this.activePlayerName = "Active Player Name";
     this.activePlayerNameNextSibling = "'s";
-    this.activeGameButtonsDisplay = "none";
+    this.activeGameButtonsDisplay = "flex";
     this.isYourTurn = false;
     this.yourPlayerName = "";
     this.continueGame = false;

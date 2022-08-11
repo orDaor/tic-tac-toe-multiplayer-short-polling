@@ -268,7 +268,7 @@ function hideGameOverStatus() {
 
 //display active game buttons
 function displayActiveGameButtons() {
-  activeGameButtonsElement.style.display = "block";
+  activeGameButtonsElement.style.display = "flex";
 }
 
 //hide active game buttons

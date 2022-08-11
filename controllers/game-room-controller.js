@@ -14,8 +14,7 @@ async function joinRandomRoom(req, res, next) {
   let responseData = {};
   //validate user input
   if (!validation.isUserInputValid(req.body)) {
-    responseData.message =
-      "Please choose a valid name with at least 3 characters";
+    responseData.message = "Please choose a name between 3 and 15 characters";
     responseData.inputNotValid = true;
     res.json(responseData);
     return;
@@ -148,8 +147,7 @@ async function createAndJoinPrivateRoom(req, res, next) {
   let responseData = {};
   //validate user input
   if (!validation.isUserInputValid(req.body)) {
-    responseData.message =
-      "Please choose a valid name with at least 3 characters";
+    responseData.message = "Please choose a name between 3 and 15 characters";
     responseData.inputNotValid = true;
     res.json(responseData);
     return;
@@ -236,7 +234,13 @@ async function joinPrivateRoom(req, res, next) {
   }
 
   //create a player with the user input data and save it inside the room
-  const player = new Player(req.body.name, symbol, playerNumber, hasPlayerTurn, false);
+  const player = new Player(
+    req.body.name,
+    symbol,
+    playerNumber,
+    hasPlayerTurn,
+    false
+  );
   room.addPlayer(player);
 
   //save the new created room in the DB

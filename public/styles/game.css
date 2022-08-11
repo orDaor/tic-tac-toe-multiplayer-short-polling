@@ -69,6 +69,7 @@
 
 #players-info {
   margin: var(--active-game-section-vertical-margin) auto;
+  padding: 0 1rem;
   display: flex;
   flex-direction: column;
   gap: 0.2rem;
@@ -80,7 +81,6 @@
 #players-info .player-name {
   color: var(--color-primary-700);
   font-weight: bold;
-  width: 10rem;
 }
 
 #players-info p {
@@ -225,14 +225,6 @@
     font-size: var(--font-size-2);
   }
 
-  #player1 {
-    text-align: right;
-  }
-
-  #player2 {
-    text-align: left;
-  }
-
   #active-game {
     margin-top: 5rem;
   }
@@ -247,7 +239,10 @@
     width: 20rem;
     height: 20rem;
   }
+}
 
+/* width >= 650px */
+@media (min-width: 650px) {
   #players-info {
     flex-direction: row;
     gap: 2rem;

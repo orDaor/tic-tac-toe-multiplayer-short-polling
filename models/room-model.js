@@ -311,6 +311,13 @@ class Room {
     }
   }
 
+  //check if for this room geme restart was already requested
+  isGameRestartInitialized() {
+    return (
+      this.players[0].restartingRequest && this.players[1].restartingRequest
+    );
+  }
+
   //generate mongodb document from Room class obj
   fromRoomToMongoDBDocument() {
     return {
