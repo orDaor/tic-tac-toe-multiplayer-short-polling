@@ -140,12 +140,16 @@ function updateCellsSelectabilityStyle(makeEmptyCellsSelectable) {
   }
 }
 
-//disables all buttons for preventing user aciont while ajax user request is not complete yet
-function disableAllButtons() {
+//enables or disables all buttons
+function setAllButtonsEnableStatus(enable) {
   const allButtons = document.querySelectorAll("button");
   for (const button of allButtons) {
-    //when a button is disabled: form submission is prevented and also,
-    //if an event listener is added for that button, the event will never fire
-    button.disabled = true;
+    if (enable) {
+      button.disabled = false;
+    } else {
+      //when a button is disabled: form submission is prevented and also,
+      //if an event listener is added for that button, the event will never fire
+      button.disabled = true;
+    }
   }
 }
