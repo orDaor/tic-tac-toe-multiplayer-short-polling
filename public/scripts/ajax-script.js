@@ -1,5 +1,9 @@
 //send request to create a new game session
 async function joinNewRoom(event) {
+  //disable user actions
+  disableUserActions();
+  let isFormSubmissionEvent;
+
   //init ajax request data
   let url;
   let body;
@@ -8,6 +12,7 @@ async function joinNewRoom(event) {
   //check whether event is form submission or button click
   const eventTargetElement = event.target;
   if (eventTargetElement.tagName === "FORM") {
+    isFormSubmissionEvent = true;
     //prevent form from being submitted
     event.preventDefault();
 
@@ -30,6 +35,7 @@ async function joinNewRoom(event) {
       name: formData.get("playername"),
     };
   } else if (eventTargetElement.tagName === "BUTTON") {
+    isFormSubmissionEvent = false;
     //check which button generated the click event
     if (eventTargetElement.classList.contains("join-random-room-btn")) {
       url = `/game/new`;
@@ -60,7 +66,18 @@ async function joinNewRoom(event) {
     response = await fetch(url, requestConfig);
   } catch (error) {
     const errorMessage = "Can not reach the server now, maybe try later?";
-    displayFormErrorMessage(errorMessage);
+    if (isFormSubmissionEvent) {
+      displayFormErrorMessage(errorMessage);
+    } else {
+      displayGameErrorMessage(errorMessage);
+    }
+    //update user action status
+    if (isMyTurnGlobal) {
+      //re-enable user actions on cells
+      updateCellsSelectabilityStyle(true);
+    }
+    //re-enable user actions on buttons
+    setAllButtonsEnableStatus(true);
     return;
   }
 
@@ -69,7 +86,18 @@ async function joinNewRoom(event) {
 
   //response with error code
   if (!response.ok || responseData.inputNotValid) {
-    displayFormErrorMessage(responseData.message);
+    if (isFormSubmissionEvent) {
+      displayFormErrorMessage(errorMessage);
+    } else {
+      displayGameErrorMessage(errorMessage);
+    }
+    //update user action status
+    if (isMyTurnGlobal) {
+      //re-enable user actions on cells
+      updateCellsSelectabilityStyle(true);
+    }
+    //re-enable user actions on buttons
+    setAllButtonsEnableStatus(true);
     return;
   }
 
@@ -133,6 +161,9 @@ async function makeGameMove(event) {
     return;
   }
 
+  //disable user actions
+  disableUserActions();
+
   //access coordinates of the clicked cell
   const row = +clickedElement.dataset.row;
   const col = +clickedElement.dataset.col;
@@ -159,6 +190,13 @@ async function makeGameMove(event) {
   } catch (error) {
     const errorMessage = "Can not reach the server now, maybe try later?";
     displayGameErrorMessage(errorMessage);
+    //update user action status
+    if (isMyTurnGlobal) {
+      //re-enable user actions on cells
+      updateCellsSelectabilityStyle(true);
+    }
+    //re-enable user actions on buttons
+    setAllButtonsEnableStatus(true);
     return;
   }
 
@@ -168,6 +206,13 @@ async function makeGameMove(event) {
   //response with error code
   if (!response.ok) {
     displayGameErrorMessage(responseData.message);
+    //update user action status
+    if (isMyTurnGlobal) {
+      //re-enable user actions on cells
+      updateCellsSelectabilityStyle(true);
+    }
+    //re-enable user actions on buttons
+    setAllButtonsEnableStatus(true);
     return;
   }
 
@@ -178,6 +223,9 @@ async function makeGameMove(event) {
 
 //send request to start a new game with the other player
 async function playAgain(event) {
+  //disable user actions
+  disableUserActions();
+
   //config ajax POST request to create a game session in the server for this client
   let response = {};
   const url = `/game/restart`;
@@ -197,6 +245,13 @@ async function playAgain(event) {
   } catch (error) {
     const errorMessage = "Can not reach the server now, maybe try later?";
     displayGameErrorMessage(errorMessage);
+    //update user action status
+    if (isMyTurnGlobal) {
+      //re-enable user actions on cells
+      updateCellsSelectabilityStyle(true);
+    }
+    //re-enable user actions on buttons
+    setAllButtonsEnableStatus(true);
     return;
   }
 
@@ -206,6 +261,13 @@ async function playAgain(event) {
   //response with error code
   if (!response.ok) {
     displayGameErrorMessage(responseData.message);
+    //update user action status
+    if (isMyTurnGlobal) {
+      //re-enable user actions on cells
+      updateCellsSelectabilityStyle(true);
+    }
+    //re-enable user actions on buttons
+    setAllButtonsEnableStatus(true);
     return;
   }
 

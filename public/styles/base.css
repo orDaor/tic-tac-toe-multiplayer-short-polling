@@ -97,6 +97,11 @@ main {
   border-color: var(--color-primary-600);
 }
 
+.btn:disabled {
+  background-color: var(--color-primary-500);
+  border: 1px solid var(--color-primary-500);
+}
+
 /* button alternative look (overwrites the base look above)  */
 .btn-alt {
   background-color: white;
@@ -108,6 +113,11 @@ main {
 .btn-alt:active {
   background-color: var(--color-primary-200);
   border-color: transparent;
+}
+
+.btn-alt:disabled {
+  background-color: white;
+  border-color: white;
 }
 
 /* width >= 70rem */

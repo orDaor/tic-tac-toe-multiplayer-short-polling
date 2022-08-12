@@ -52,44 +52,39 @@ async function shareRoomUrl(event) {
 
 //generate a div element containing link to be shared with a friend
 function displayLinkElement(url) {
-  //delete old game link div if it exists
-  removeLinkElement();
-  //link div is created and displayed with a delay
-  setTimeout(function () {
-    //div at the end of active game sectionl
-    const divLinkElement = document.createElement("div");
-    divLinkElement.id = "game-link";
-    divLinkElement.classList.add("form-control");
-    activeGameSectionElement.prepend(divLinkElement);
-    //container inside the div link for containing the label and the share button
-    const labelAndBtnContainerElement = document.createElement("div");
-    labelAndBtnContainerElement.classList.add("game-link-control");
-    divLinkElement.append(labelAndBtnContainerElement);
-    //label inside div
-    const labelLinkElement = document.createElement("label");
-    labelLinkElement.htmlFor = "gameurl";
-    labelLinkElement.textContent = "Share this link with your friend!";
-    labelAndBtnContainerElement.append(labelLinkElement);
-    //share button
-    const shareButtonElement = document.createElement("div");
-    shareButtonElement.innerHTML = shareIconHtmlGlobal;
-    shareButtonElement.classList.add("game-link-button");
-    shareButtonElement.dataset.url = url;
-    const shareIcon = shareButtonElement.querySelector("svg");
-    shareIcon.addEventListener("click", shareRoomUrl);
-    labelAndBtnContainerElement.append(shareButtonElement);
-    //input inside the div
-    const inputLinkElement = document.createElement("input");
-    inputLinkElement.id = "gameurl";
-    inputLinkElement.type = "text";
-    inputLinkElement.readOnly = true;
-    if (!url) {
-      inputLinkElement.value = "https://linkforyourfriend";
-    } else {
-      inputLinkElement.value = url;
-    }
-    divLinkElement.append(inputLinkElement);
-  }, 1000);
+  //div at the end of active game sectionl
+  const divLinkElement = document.createElement("div");
+  divLinkElement.id = "game-link";
+  divLinkElement.classList.add("form-control");
+  activeGameSectionElement.prepend(divLinkElement);
+  //container inside the div link for containing the label and the share button
+  const labelAndBtnContainerElement = document.createElement("div");
+  labelAndBtnContainerElement.classList.add("game-link-control");
+  divLinkElement.append(labelAndBtnContainerElement);
+  //label inside div
+  const labelLinkElement = document.createElement("label");
+  labelLinkElement.htmlFor = "gameurl";
+  labelLinkElement.textContent = "Share this link with your friend!";
+  labelAndBtnContainerElement.append(labelLinkElement);
+  //share button
+  const shareButtonElement = document.createElement("div");
+  shareButtonElement.innerHTML = shareIconHtmlGlobal;
+  shareButtonElement.classList.add("game-link-button");
+  shareButtonElement.dataset.url = url;
+  const shareIcon = shareButtonElement.querySelector("svg");
+  shareIcon.addEventListener("click", shareRoomUrl);
+  labelAndBtnContainerElement.append(shareButtonElement);
+  //input inside the div
+  const inputLinkElement = document.createElement("input");
+  inputLinkElement.id = "gameurl";
+  inputLinkElement.type = "text";
+  inputLinkElement.readOnly = true;
+  if (!url) {
+    inputLinkElement.value = "https://linkforyourfriend";
+  } else {
+    inputLinkElement.value = url;
+  }
+  divLinkElement.append(inputLinkElement);
 }
 
 function removeLinkElement() {
@@ -152,4 +147,10 @@ function setAllButtonsEnableStatus(enable) {
       button.disabled = true;
     }
   }
+}
+
+//disable user actions
+function disableUserActions() {
+  updateCellsSelectabilityStyle(false);
+  setAllButtonsEnableStatus(false);
 }

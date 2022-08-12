@@ -7,11 +7,6 @@ function initGame(responseData) {
   displayActiveGameButtons();
   displayGameTurnInfo();
 
-  //check if a private room was created
-  if (responseData.invitationUrl) {
-    displayLinkElement(responseData.invitationUrl);
-  }
-
   //this player name
   playerNameGlobal = responseData.players[responseData.playerNumber - 1].name;
 
@@ -28,7 +23,6 @@ function initGame(responseData) {
   if (responseData.isYourTurn) {
     isMyTurnGlobal = true;
     setActivePlayerName(isMyTurnGlobal);
-    updateCellsSelectabilityStyle(true);
     //start periodic fetch of other player data
     const isOtherPlayerConnected = isPlayerConnected(
       responseData.players,
@@ -44,11 +38,34 @@ function initGame(responseData) {
       responseData.players,
       otherPlayerNumber
     );
-    updateCellsSelectabilityStyle(false);
     //start  periodic fetch of the game status
     //(server checks if it is clients turn, in that case returns updated game status)
     sendPeriodicRequest(fetchRoomDataConfig);
   }
+
+  //check if a private room was created for displaying the invitation link
+  const divLinkElement = document.getElementById("game-link");
+  if (responseData.invitationUrl) {
+    if (divLinkElement) {
+      removeLinkElement();
+      displayLinkElement(responseData.invitationUrl);
+      alert("A link was generated for your new private room");
+    } else {
+      displayLinkElement(responseData.invitationUrl);
+    }
+  } else {
+    removeLinkElement();
+  }
+
+  //update user action status
+  if (responseData.isYourTurn) {
+    //re-enable user actions on cells
+    updateCellsSelectabilityStyle(true);
+  } else {
+    updateCellsSelectabilityStyle(false);
+  }
+  //re-enable user actions on buttons
+  setAllButtonsEnableStatus(true);
 }
 
 //check if a specific player is connected to the room
@@ -115,7 +132,6 @@ function setGameBoardData(players, gameStatus) {
 
 function startTurn(updatedRoom) {
   setGameBoardData(updatedRoom.players, updatedRoom.gameStatus);
-  updateCellsSelectabilityStyle(false);
   //check if the other player won or generated a draw after successfully making his game move
   const gameOverStatus = updatedRoom.gameOverStatus;
   if (gameOverStatus.isOver) {
@@ -124,19 +140,20 @@ function startTurn(updatedRoom) {
     setGameOverStatus(!gameOverStatus.isWinner, gameOverStatus.isDraw);
     hideActiveGameButtons();
     hideGameTurnInfo();
+    updateCellsSelectabilityStyle(false);
     return;
   }
 
   //after the other player made his move, the game is not over yet...
-  updateCellsSelectabilityStyle(true);
   isMyTurnGlobal = true;
   setActivePlayerName(isMyTurnGlobal);
+  //enable user actions on cells
+  updateCellsSelectabilityStyle(true);
 }
 
 function finishTurn(updatedRoom) {
   isMyTurnGlobal = false;
   setGameBoardData(updatedRoom.players, updatedRoom.gameStatus);
-  updateCellsSelectabilityStyle(false);
   //check if you won or generated a draw after successfully making your game move
   const gameOverStatus = updatedRoom.gameOverStatus;
   if (gameOverStatus.isOver) {
@@ -144,6 +161,10 @@ function finishTurn(updatedRoom) {
     setGameOverStatus(gameOverStatus.isWinner, gameOverStatus.isDraw);
     hideActiveGameButtons();
     hideGameTurnInfo();
+    //disable user actions on cells
+    updateCellsSelectabilityStyle(false);
+    //re-enable user actions on buttons
+    setAllButtonsEnableStatus(true);
     return;
   }
 
@@ -153,6 +174,10 @@ function finishTurn(updatedRoom) {
   //start  periodic fetch of the game status
   //(server checks if it is clients turn, in that case returns updated game status)
   sendPeriodicRequest(fetchRoomDataConfig);
+  //update signed cells style and keep dosabled user actions on cells
+  updateCellsSelectabilityStyle(false);
+  //re-enable user actions on buttons
+  setAllButtonsEnableStatus(true);
 }
 
 //find the number of the player this client is playing with
@@ -180,7 +205,7 @@ function setActivePlayerName(isMyTurn, players, activePlayerNumber) {
   }
 }
 
-//make game move
+//make frontend game move
 function setGameMove(playerNumber, players, coord) {
   const row = coord[0];
   const col = coord[1];
@@ -191,7 +216,7 @@ function setGameMove(playerNumber, players, coord) {
   gameBoardLiElements[arrayCoord].classList.remove("not-selectable");
 }
 
-//remove game move
+//remove frontend game move
 function removeGameMove(coord) {
   const row = coord[0];
   const col = coord[1];
