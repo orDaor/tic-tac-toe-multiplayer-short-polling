@@ -112,7 +112,11 @@ if (isOtherPlayerConnectedElement.content === "false") {
   }
 }
 
+//this player name
 let playerNameGlobal = myPlayerNameElement.content;
+
+//this player symbol
+let playerSymbolGlobal = "";
 
 //LINK ELEMENT FOR INVITATION initialization ---------------------------------------------------------
 if (invitationUrlElement.content && isGameOverElement.content === "false") {

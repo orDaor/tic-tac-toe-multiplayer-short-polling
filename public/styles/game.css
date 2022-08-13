@@ -179,6 +179,10 @@
     var(--active-game-section-vertical-margin) auto;
   font-size: var(--font-size-3);
   width: 95%;
+  height: 3.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 #game-turn p {

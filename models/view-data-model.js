@@ -92,7 +92,7 @@ class ViewData {
         //game is not over yet...
         this.isGameOver = false;
         this.gameOverStatusDisplay = "none";
-        this.gameTurnInfoDisplay = "block";
+        this.gameTurnInfoDisplay = "flex";
         this.gameOverStatusText = "Game over status text";
         this.activeGameButtonsDisplay = "flex";
         //set the active player name based on current player turn
@@ -156,7 +156,7 @@ class ViewData {
     this.activeGameDisplay = "none";
     this.gameOverStatusDisplay = "none";
     this.gameOverStatusText = "Game over status text";
-    this.gameTurnInfoDisplay = "block";
+    this.gameTurnInfoDisplay = "flex";
     this.player1Name = "Player 1 Name";
     this.player2Name = "Player 2 Name";
     this.player1Symbol = "";

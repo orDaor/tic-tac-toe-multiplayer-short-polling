@@ -87,9 +87,9 @@ async function joinNewRoom(event) {
   //response with error code
   if (!response.ok || responseData.inputNotValid) {
     if (isFormSubmissionEvent) {
-      displayFormErrorMessage(errorMessage);
+      displayFormErrorMessage(responseData.message);
     } else {
-      displayGameErrorMessage(errorMessage);
+      displayGameErrorMessage(responseData.message);
     }
     //update user action status
     if (isMyTurnGlobal) {
@@ -161,12 +161,19 @@ async function makeGameMove(event) {
     return;
   }
 
-  //disable user actions
-  disableUserActions();
-
   //access coordinates of the clicked cell
   const row = +clickedElement.dataset.row;
   const col = +clickedElement.dataset.col;
+
+  //set frontend game move for improving user experience
+  setGameMove(playerSymbolGlobal, [row, col]);
+
+  //disable user actions
+  disableUserActions();
+
+  //display loader game turn info
+  hideGameTurnParagraph();
+  displayGameTurnLoader();
 
   //config ajax POST request to create a game session in the server for this client
   let response = {};
@@ -190,11 +197,13 @@ async function makeGameMove(event) {
   } catch (error) {
     const errorMessage = "Can not reach the server now, maybe try later?";
     displayGameErrorMessage(errorMessage);
-    //update user action status
-    if (isMyTurnGlobal) {
-      //re-enable user actions on cells
-      updateCellsSelectabilityStyle(true);
-    }
+    //set game turn info
+    displayGameTurnParagraph();
+    removeGameTurnLoader();
+    //remove frontend game move
+    removeGameMove([row, col]);
+    //re-enable user actions on cells
+    updateCellsSelectabilityStyle(true);
     //re-enable user actions on buttons
     setAllButtonsEnableStatus(true);
     return;
@@ -206,11 +215,13 @@ async function makeGameMove(event) {
   //response with error code
   if (!response.ok) {
     displayGameErrorMessage(responseData.message);
-    //update user action status
-    if (isMyTurnGlobal) {
-      //re-enable user actions on cells
-      updateCellsSelectabilityStyle(true);
-    }
+    //set game turn info
+    displayGameTurnParagraph();
+    removeGameTurnLoader();
+    //remove frontend game move
+    removeGameMove([row, col]);
+    //re-enable user actions on cells
+    updateCellsSelectabilityStyle(true);
     //re-enable user actions on buttons
     setAllButtonsEnableStatus(true);
     return;
@@ -222,7 +233,7 @@ async function makeGameMove(event) {
 }
 
 //send request to start a new game with the other player
-async function playAgain(event) {
+async function playAgain() {
   //disable user actions
   disableUserActions();
 
@@ -245,11 +256,6 @@ async function playAgain(event) {
   } catch (error) {
     const errorMessage = "Can not reach the server now, maybe try later?";
     displayGameErrorMessage(errorMessage);
-    //update user action status
-    if (isMyTurnGlobal) {
-      //re-enable user actions on cells
-      updateCellsSelectabilityStyle(true);
-    }
     //re-enable user actions on buttons
     setAllButtonsEnableStatus(true);
     return;
@@ -261,11 +267,6 @@ async function playAgain(event) {
   //response with error code
   if (!response.ok) {
     displayGameErrorMessage(responseData.message);
-    //update user action status
-    if (isMyTurnGlobal) {
-      //re-enable user actions on cells
-      updateCellsSelectabilityStyle(true);
-    }
     //re-enable user actions on buttons
     setAllButtonsEnableStatus(true);
     return;

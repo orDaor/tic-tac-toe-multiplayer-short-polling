@@ -113,12 +113,22 @@ function hideGameErrorMessage() {
 
 //show game turn info
 function displayGameTurnInfo() {
-  gameTurnInfo.style.display = "block";
+  gameTurnInfo.style.display = "flex";
 }
 
 //hide game turn info
 function hideGameTurnInfo() {
   gameTurnInfo.style.display = "none";
+}
+
+//show game turn paragraph
+function displayGameTurnParagraph() {
+  gameTurnInfo.querySelector("p").style.display = "block";
+}
+
+//hide game turn paragraph
+function hideGameTurnParagraph() {
+  gameTurnInfo.querySelector("p").style.display = "none";
 }
 
 //apply selected class to NON empty cells (containing a symbol)
@@ -159,17 +169,34 @@ function disableUserActions() {
   setAllButtonsEnableStatus(false);
 }
 
-//create and display a loader element
-function displayLoader() {
+//create and display the main page loader
+function displayMainLoader() {
   const loaderElement = document.createElement("div");
   loaderElement.classList.add("loader");
+  loaderElement.id = "main-loader";
   document.querySelector("main").append(loaderElement);
 }
 
-//remove loader element
-function removeLoader() {
-  const loaderElement = document.querySelector(".loader");
+//remove the main page loader
+function removeMainLoader() {
+  const loaderElement = document.getElementById("main-loader");
   if (loaderElement) {
     loaderElement.parentElement.removeChild(loaderElement);
+  }
+}
+
+//create and display the game turn info loader
+function displayGameTurnLoader() {
+  const loaderElement = document.createElement("div");
+  loaderElement.classList.add("loader");
+  loaderElement.id = "game-turn-loader";
+  gameTurnInfo.append(loaderElement);
+}
+
+//remove the game turn info loader
+function removeGameTurnLoader() {
+  const loaderElement = document.getElementById("game-turn-loader");
+  if (loaderElement) {
+    gameTurnInfo.removeChild(loaderElement);
   }
 }

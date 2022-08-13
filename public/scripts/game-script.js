@@ -3,11 +3,11 @@ function initGame(responseData) {
   //display a loader for a given time and then load the received game room status on the page
   hideGameConfigSection();
   hideActiveGameSection();
-  displayLoader();
+  displayMainLoader();
   setTimeout(function () {
-    removeLoader();
+    removeMainLoader();
     initGamePlay(responseData);
-  }, 1000);
+  }, 500);
 }
 
 function initGamePlay(responseData) {
@@ -19,6 +19,10 @@ function initGamePlay(responseData) {
 
   //this player name
   playerNameGlobal = responseData.players[responseData.playerNumber - 1].name;
+
+  //this player symbol
+  playerSymbolGlobal =
+    responseData.players[responseData.playerNumber - 1].symbol;
 
   //set the player names using server response data
   setPlayersData(responseData.players);
@@ -154,6 +158,9 @@ function startTurn(updatedRoom) {
 }
 
 function finishTurn(updatedRoom) {
+  displayGameTurnParagraph();
+  removeGameTurnLoader();
+
   isMyTurnGlobal = false;
   setGameBoardData(updatedRoom.players, updatedRoom.gameStatus);
   //check if you won or generated a draw after successfully making your game move
@@ -208,24 +215,27 @@ function setActivePlayerName(isMyTurn, players, activePlayerNumber) {
 }
 
 //make frontend game move
-function setGameMove(playerNumber, players, coord) {
+function setGameMove(symbol, coord) {
   const row = coord[0];
   const col = coord[1];
-  const symbol = players[playerNumber - 1].symbol;
-  const arrayCoord = fromMatrixCoordToArrayCoord(getEmptyBoard(), row, col);
+  const arrayCoord = fromMatrixCoordToArrayCoord(
+    getEmptyBoard(),
+    row - 1,
+    col - 1
+  );
   gameBoardLiElements[arrayCoord].textContent = symbol;
-  gameBoardLiElements[arrayCoord].classList.add("selected");
-  gameBoardLiElements[arrayCoord].classList.remove("not-selectable");
 }
 
 //remove frontend game move
 function removeGameMove(coord) {
   const row = coord[0];
   const col = coord[1];
-  const arrayCoord = fromMatrixCoordToArrayCoord(getEmptyBoard(), row, col);
+  const arrayCoord = fromMatrixCoordToArrayCoord(
+    getEmptyBoard(),
+    row - 1,
+    col - 1
+  );
   gameBoardLiElements[arrayCoord].textContent = "";
-  gameBoardLiElements[arrayCoord].classList.remove("selected");
-  gameBoardLiElements[arrayCoord].classList.remove("not-selectable");
 }
 
 //set winner player name
