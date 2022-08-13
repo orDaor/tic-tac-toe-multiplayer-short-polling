@@ -1,7 +1,17 @@
 //initialize game
 function initGame(responseData) {
-  //operation was successful, display gameboard and correct game info
+  //display a loader for a given time and then load the received game room status on the page
   hideGameConfigSection();
+  hideActiveGameSection();
+  displayLoader();
+  setTimeout(function () {
+    removeLoader();
+    initGamePlay(responseData);
+  }, 1000);
+}
+
+function initGamePlay(responseData) {
+  //operation was successful, display gameboard and correct game info
   displayActiveGameSection();
   hideGameOverStatus();
   displayActiveGameButtons();
@@ -44,17 +54,9 @@ function initGame(responseData) {
   }
 
   //check if a private room was created for displaying the invitation link
-  const divLinkElement = document.getElementById("game-link");
   if (responseData.invitationUrl) {
-    if (divLinkElement) {
-      removeLinkElement();
-      displayLinkElement(responseData.invitationUrl);
-      alert("A link was generated for your new private room");
-    } else {
-      displayLinkElement(responseData.invitationUrl);
-    }
-  } else {
     removeLinkElement();
+    displayLinkElement(responseData.invitationUrl);
   }
 
   //update user action status

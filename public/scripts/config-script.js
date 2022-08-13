@@ -13,6 +13,10 @@ function displayActiveGameSection() {
   activeGameSectionElement.style.display = "block";
 }
 
+function hideActiveGameSection() {
+  activeGameSectionElement.style.display = "none";
+}
+
 //show game over status
 function displayGameOverStatus() {
   gameOverStatusElement.style.display = "block";
@@ -153,4 +157,19 @@ function setAllButtonsEnableStatus(enable) {
 function disableUserActions() {
   updateCellsSelectabilityStyle(false);
   setAllButtonsEnableStatus(false);
+}
+
+//create and display a loader element
+function displayLoader() {
+  const loaderElement = document.createElement("div");
+  loaderElement.classList.add("loader");
+  document.querySelector("main").append(loaderElement);
+}
+
+//remove loader element
+function removeLoader() {
+  const loaderElement = document.querySelector(".loader");
+  if (loaderElement) {
+    loaderElement.parentElement.removeChild(loaderElement);
+  }
 }
