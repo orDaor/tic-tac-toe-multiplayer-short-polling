@@ -8,6 +8,12 @@ const Player = require("../models/player-model");
 const validation = require("../utils/validation-util");
 const sessionUtil = require("../utils/sessions-util");
 
+//environment variable: application domain
+let appDomain = "http://localhost:3000";
+if (process.env.APP_DOMAIN) {
+  appDomain = process.env.APP_DOMAIN;
+}
+
 //associate the client as a player number to a new game room
 async function joinRandomRoom(req, res, next) {
   //init response data
@@ -186,7 +192,7 @@ async function createAndJoinPrivateRoom(req, res, next) {
   responseData.gameStatus = newRoom.gameStatus;
   responseData.playerNumber = playerNumber;
   responseData.isYourTurn = true;
-  responseData.invitationUrl = `http://localhost:3000/game/new/friend/${newRoom.roomId}`;
+  responseData.invitationUrl = `${appDomain}/game/new/friend/${newRoom.roomId}`;
   res.json(responseData);
   return;
 }
