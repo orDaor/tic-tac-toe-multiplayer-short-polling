@@ -17,6 +17,7 @@ const gameConfigRoutes = require("./routes/game-config-routes");
 const gameRoomRoutes = require("./routes/game-room-routes");
 const gamePlayRoutes = require("./routes/game-play-routes");
 const playerRoutes = require("./routes/player-routes");
+const Room = require("./models/room-model");
 
 //create express app
 const app = express();
@@ -62,6 +63,10 @@ db.connectToDatabase()
   .then(function () {
     //start web server
     app.listen(3000);
+    //start cyclical process for cleaning inactive rooms in the DB
+    //NOTE: every 3 hour it deletes the rooms which have been inactive for more than 3 hours
+    const oneHour_ms = 1000 * 60 * 60;
+    Room.deleteInactiveRoomsCiclically(3 * oneHour_ms, 3 * oneHour_ms);
   })
   .catch(function (error) {
     //catch error if connection to database fails

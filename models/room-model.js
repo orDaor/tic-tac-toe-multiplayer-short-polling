@@ -170,6 +170,46 @@ class Room {
     return room;
   }
 
+  //delete all rooms matching a filter
+  static async deleteByFilter(query) {
+    await db.getDb().collection("rooms").deleteMany(query);
+  }
+
+  //cyclically deletes inactive rooms in the DB every delay time in[ms].
+  //A room is considered inactive when its lastChangeDate is elder than the passed inactive time in [ms]
+  static async deleteInactiveRoomsCiclically(delay, maxInactiveTime) {
+    //check if inputs make sense
+    const oneHour_ms = 1000 * 60 * 60;
+    const filteredDelay = +delay;
+    const filteredMaxInactiveTime = +maxInactiveTime;
+    if (
+      !filteredDelay ||
+      filteredDelay < 1 * oneHour_ms ||
+      !filteredMaxInactiveTime ||
+      filteredMaxInactiveTime < 1 * oneHour_ms
+    ) {
+      // throw Error("Delay parameter not ok");   // UNCOMMENT !!
+    }
+    //define inactive rooms to be deleted
+    const dateNow_ms = new Date().getTime();
+    const query = {
+      lastChangeDate: { $lt: new Date(dateNow_ms - filteredMaxInactiveTime) },
+    };
+    //debugging
+    console.log("Check for inactive rooms to delete");
+    try {
+      await Room.deleteByFilter(query);
+    } catch (error) {
+      console.log(error);
+    }
+    setTimeout(function () {
+      Room.deleteInactiveRoomsCiclically(
+        filteredDelay,
+        filteredMaxInactiveTime
+      );
+    }, filteredDelay);
+  }
+
   //check if room is available (at leas 1 player slot is available)
   isAvailable() {
     //update room availability status
