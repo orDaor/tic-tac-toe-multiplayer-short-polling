@@ -16,6 +16,7 @@ async function getRoomData(req, res, next) {
   //fetch game session data
   const sessionGameData = req.session.gameData;
   if (!sessionGameData) {
+    const error = new Error("No session game data found");
     next(error);
     return;
   }
@@ -56,6 +57,7 @@ async function makeMove(req, res, next) {
   //fetch game session data
   const sessionGameData = req.session.gameData;
   if (!sessionGameData) {
+    const error = new Error("No session game data found");
     next(error);
     return;
   }
@@ -96,6 +98,7 @@ async function playAgain(req, res, next) {
   //fetch game session data
   const sessionGameData = req.session.gameData;
   if (!sessionGameData) {
+    const error = new Error("No session game data found");
     next(error);
     return;
   }
