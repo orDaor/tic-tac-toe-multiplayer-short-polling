@@ -78,6 +78,9 @@ class ViewData {
       //name of the player requesting this room data
       this.yourPlayerName = players[playerNumber - 1].name;
 
+      //symbol of the player requesting this room
+      this.yourPlayerSymbol = players[playerNumber - 1].symbol;
+
       //player is asking for continuing the game in this room
       this.continueGame = true;
 
@@ -169,6 +172,7 @@ class ViewData {
     this.activeGameButtonsDisplay = "flex";
     this.isYourTurn = false;
     this.yourPlayerName = "";
+    this.yourPlayerSymbol = "";
     this.continueGame = false;
     this.isGameOver = true;
     this.invitationUrl = "";

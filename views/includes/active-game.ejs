@@ -11,13 +11,6 @@
       </button>
     </div>
   </article>
-  <div class="game-error-message">
-    <p>
-      <span>Game error message</span>
-      <button>X</button>
-    </p>
-  </div>
-
   <div id="players-info">
     <p id="player1" class="player-name">
       <% if (viewData.player1Name && viewData.player1Symbol && viewData.player1Number) { %> 
@@ -35,7 +28,12 @@
       <% } %> 
     </p>
   </div>
-  
+  <div class="game-error-message">
+    <p>
+      <span>Game error message</span>
+      <button>X</button>
+    </p>
+  </div>
   <ol id="game-board">
     <% for (const cell of viewData.boardCellsList) { %> 
       <li data-row="<%= cell.row %>" data-col="<%= cell.col %>" class="<%= cell.cssClass %>"><%= cell.symbol %></li>
@@ -52,5 +50,5 @@
     <button class="btn invite-friend-btn join-new-room-btn">
       Invite Friend
     </button>
-    <a class="btn" href="/game">Change Name</a>
+    <a class="btn" href="/game">HOME</a>
 </section>

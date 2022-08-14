@@ -210,6 +210,9 @@
   font-size: var(--font-size-1);
   width: 100%;
   text-decoration: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 /* width >= 480px */

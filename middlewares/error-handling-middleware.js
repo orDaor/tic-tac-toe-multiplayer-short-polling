@@ -9,7 +9,7 @@ const errorUtil = require("../utils/errors-util");
 
 function errorHandlingMiddleware(error, req, res, next) {
   console.log(error);
-  const errorMessage = "An error occured in the server. Maybe try later?";
+  const errorMessage = "An error occured. Please consider going back to HOME page";
   errorUtil.sendResponseErrorData(req, res, 500, errorMessage);
 }
 

@@ -8,6 +8,7 @@ const isMyTurnElement = document.querySelector('meta[name="is-my-turn"]');
 const myPlayerNameElement = document.querySelector(
   'meta[name="my-player-name"]'
 );
+const myPlayerSymbolElement = document.querySelector('meta[name="my-player-symbol"]');
 const continueGameElement = document.querySelector(
   'meta[name="continue-game"]'
 );
@@ -116,7 +117,7 @@ if (isOtherPlayerConnectedElement.content === "false") {
 let playerNameGlobal = myPlayerNameElement.content;
 
 //this player symbol
-let playerSymbolGlobal = "";
+let playerSymbolGlobal = myPlayerSymbolElement.content;
 
 //LINK ELEMENT FOR INVITATION initialization ---------------------------------------------------------
 if (invitationUrlElement.content && isGameOverElement.content === "false") {

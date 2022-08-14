@@ -34,7 +34,7 @@ function fromMatrixCoordToArrayCoord(matrix, rowCoord, colCoord) {
   }
 }
 
-//class defining period request configuration object
+//class defining periodic request configuration object
 class PeriodicRequestConfig {
   constructor(send, delay, stop, resolve, handleError) {
     this.send = send; //function sending the request
@@ -69,7 +69,7 @@ async function sendPeriodicRequest(config) {
     //Instead a custom error message is displayed because of a technical problem.
     let errorMessage;
     if (error.code) {
-      errorMessage = "An error occured in the server";
+      errorMessage = "An error occured. Please consider going back to HOME page";
     } else {
       errorMessage = "We are expiriencing some connection problems";
     }
