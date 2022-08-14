@@ -8,11 +8,17 @@ const expressSession = require("express-session");
 //imports custom
 //...
 
+//environment variable for the database URL
+let mongodbUrl = "mongodb://127.0.0.1:27017";
+if (process.env.MONGODB_URL) {
+  mongodbUrl = process.env.MONGODB_URL;
+}
+
 //create a session store for the session package passed as parameter
 function createSessionStore() {
   const MongoDBStore = mongoDbStore(expressSession);
   const store = new MongoDBStore({
-    uri: "mongodb://127.0.0.1:27017",
+    uri: mongodbUrl,
     databaseName: "tic-tac-toe",
     collection: "sessions",
   });
