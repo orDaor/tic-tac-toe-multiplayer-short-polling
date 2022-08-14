@@ -167,7 +167,6 @@ async function makeGameMove(event) {
 
   //set frontend game move for improving user experience
   setGameMove(playerSymbolGlobal, [row, col]);
-  console.log(playerSymbolGlobal, row, col);
 
   //disable user actions
   disableUserActions();

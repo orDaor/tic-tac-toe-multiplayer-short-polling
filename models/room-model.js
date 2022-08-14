@@ -188,7 +188,7 @@ class Room {
       !filteredMaxInactiveTime ||
       filteredMaxInactiveTime < 1 * oneHour_ms
     ) {
-      // throw Error("Delay parameter not ok");   // UNCOMMENT !!
+      throw Error("Delay parameter not ok");  
     }
     //define inactive rooms to be deleted
     const dateNow_ms = new Date().getTime();
