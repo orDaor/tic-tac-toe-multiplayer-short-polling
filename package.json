@@ -1,8 +1,11 @@
 {
   "name": "tic-tac-toe",
   "version": "1.0.0",
-  "description": "Tic-tac-toe implementation demo",
+  "description": "Tic-tac-toe Multiplayer",
   "main": "app.js",
+  "engines": {
+    "node": "17.x"
+  },
   "scripts": {
     "start": "nodemon app.js"
   },

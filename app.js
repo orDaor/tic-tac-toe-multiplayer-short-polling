@@ -58,11 +58,17 @@ app.use(notFoundMidlleware);
 //error handling middleware
 app.use(errorHandlingMiddleware);
 
+//init the correct port number using an environment variable ! !
+let portNumber = 3000;
+if (process.env.PORT) {
+  portNumber = process.env.PORT;
+}
+
 //start server only after connection to database has established without errors
 db.connectToDatabase()
   .then(function () {
     //start web server
-    app.listen(3000);
+    app.listen(portNumber);
     //start cyclical process for cleaning inactive rooms in the DB
     //NOTE: every 3 hour it deletes the rooms which have been inactive for more than 3 hours
     const oneHour_ms = 1000 * 60 * 60;

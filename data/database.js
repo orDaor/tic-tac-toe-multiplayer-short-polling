@@ -10,9 +10,15 @@ const MongoClient = require("mongodb").MongoClient;
 //this variable will give access to the mongodb database
 let database;
 
+//environment variable for the database URL
+let mongodbUrl = "mongodb://127.0.0.1:27017";
+if (process.env.MONGODB_URL) {
+  mongodbUrl = process.env.MONGODB_URL;
+}
+
 async function connect() {
   //connect to DB server and get access to it
-  const client = await MongoClient.connect("mongodb://127.0.0.1:27017");
+  const client = await MongoClient.connect(mongodbUrl);
   //get access to specific database hosted in the DB server, even if it does not exist yet (it
   //will be created with first queries)
   database = client.db("tic-tac-toe");
