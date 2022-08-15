@@ -16,6 +16,7 @@ function initGamePlay(responseData) {
   hideGameOverStatus();
   displayActiveGameButtons();
   displayGameTurnInfo();
+  hideGameErrorMessage();
 
   //this player name
   playerNameGlobal = responseData.players[responseData.playerNumber - 1].name;

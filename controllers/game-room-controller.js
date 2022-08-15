@@ -26,7 +26,7 @@ async function joinRandomRoom(req, res, next) {
     return;
   }
 
-  //check if a room is already assigned to the room
+  //check if a room is already assigned to the client
   const sessionGameData = req.session.gameData;
   let roomId;
   if (sessionGameData) {
@@ -76,6 +76,12 @@ async function joinRandomRoom(req, res, next) {
       roomId: newRoom.roomId,
       playerNumber: playerNumber,
     });
+
+    //block the room the client was already assigned to, so that no other players
+    //will be able to join this room even if it still results available
+    if (roomId) {
+      Room.blockById(roomId); //this will room update query (async process)
+    }
 
     //set and send response data
     responseData.players = newRoom.players;
@@ -138,6 +144,12 @@ async function joinRandomRoom(req, res, next) {
     playerNumber: playerNumber,
   });
 
+  //block the room the client was already assigned to, so that no other players
+  //will be able to join this room even if it still results available
+  if (roomId) {
+    Room.blockById(roomId); //this will room update query (async process)
+  }
+
   //set and send response data
   responseData.players = availableRoom.players;
   responseData.gameStatus = availableRoom.gameStatus;
@@ -157,6 +169,15 @@ async function createAndJoinPrivateRoom(req, res, next) {
     responseData.inputNotValid = true;
     res.json(responseData);
     return;
+  }
+
+  //check if a room is already assigned to the client
+  const sessionGameData = req.session.gameData;
+  let roomId;
+  if (sessionGameData) {
+    roomId = sessionGameData.roomId;
+  } else {
+    roomId = null;
   }
 
   const newRoom = Room.createEmpty(true); //private room
@@ -187,6 +208,12 @@ async function createAndJoinPrivateRoom(req, res, next) {
     playerNumber: playerNumber,
   });
 
+  //block the room the client was already assigned to, so that no other players
+  //will be able to join this room even if it still results available
+  if (roomId) {
+    Room.blockById(roomId); //this will room update query (async process)
+  }
+
   //set and send response data
   responseData.players = newRoom.players;
   responseData.gameStatus = newRoom.gameStatus;
@@ -203,10 +230,16 @@ async function joinPrivateRoom(req, res, next) {
   let responseData = {};
 
   //requested room to join
-  const roomId = req.params.roomId;
+  const newRoomId = req.params.roomId;
 
-  //game session data
+  //check if a room is already assigned to the client
   const sessionGameData = req.session.gameData;
+  let roomId;
+  if (sessionGameData) {
+    roomId = sessionGameData.roomId;
+  } else {
+    roomId = null;
+  }
 
   //validate user input
   if (!validation.isUserInputValid(req.body)) {
@@ -220,7 +253,7 @@ async function joinPrivateRoom(req, res, next) {
   //check whether the client is allowed to join this private room
   let room;
   try {
-    room = await Room.findByIdAndCheckAccessRights(roomId, sessionGameData);
+    room = await Room.findByIdAndCheckAccessRights(newRoomId, sessionGameData);
   } catch (error) {
     next(error);
     return;
@@ -262,6 +295,12 @@ async function joinPrivateRoom(req, res, next) {
     roomId: room.roomId,
     playerNumber: playerNumber,
   });
+
+  //block the room the client was already assigned to, so that no other players
+  //will be able to join this room even if it still results available
+  if (roomId) {
+    Room.blockById(roomId); //this will room update query (async process)
+  }
 
   //set and send response data
   responseData.players = room.players;

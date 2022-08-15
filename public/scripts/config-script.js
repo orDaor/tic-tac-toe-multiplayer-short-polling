@@ -50,7 +50,7 @@ async function shareRoomUrl(event) {
   try {
     await navigator.share(shareData);
   } catch (error) {
-    displayGameErrorMessage("Please copy the link manually");
+    // displayGameErrorMessage("Please copy the link manually");
   }
 }
 

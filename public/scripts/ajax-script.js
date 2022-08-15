@@ -144,6 +144,16 @@ async function fetchRoomData() {
   }
   //response ok, check data
   const responseData = await response.json();
+
+  //check if the other player left the room
+  if (responseData.room) {
+    if (responseData.room.blocked) {
+      const error = new Error("The other player left the room");
+      error.code = 999;
+      throw error;
+    }
+  }
+
   return responseData.room;
 }
 

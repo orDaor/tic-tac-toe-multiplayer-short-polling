@@ -69,7 +69,13 @@ async function sendPeriodicRequest(config) {
     //Instead a custom error message is displayed because of a technical problem.
     let errorMessage;
     if (error.code) {
-      errorMessage = "An error occured. Please consider going back to HOME page";
+      if (error.code === 999) {
+        errorMessage =
+          "The other player left the room. Please choose a new random one or invite a friend!";
+      } else {
+        errorMessage =
+          "An error occured. Please consider going back to the HOME page";
+      }
     } else {
       errorMessage = "We are expiriencing some connection problems";
     }

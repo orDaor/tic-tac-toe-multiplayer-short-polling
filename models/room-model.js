@@ -188,7 +188,7 @@ class Room {
       !filteredMaxInactiveTime ||
       filteredMaxInactiveTime < 1 * oneHour_ms
     ) {
-      throw Error("Delay parameter not ok");  
+      throw Error("Delay parameter not ok");
     }
     //define inactive rooms to be deleted
     const dateNow_ms = new Date().getTime();
@@ -208,6 +208,21 @@ class Room {
         filteredMaxInactiveTime
       );
     }, filteredDelay);
+  }
+
+  //block a specific room in the DB
+  static blockById(roomId) {
+    const query = {
+      _id: new ObjectId(roomId),
+    };
+    const update = { $set: { blocked: true } };
+    db.getDb()
+      .collection("rooms")
+      .updateOne(query, update)
+      .catch(function (error) {
+        console.log(`Failed to block the room with id ${roomId}`);
+        console.log(error);
+      });
   }
 
   //check if room is available (at leas 1 player slot is available)

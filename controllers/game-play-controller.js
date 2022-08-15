@@ -35,13 +35,18 @@ async function getRoomData(req, res, next) {
   const isYourTurn = room.gameStatus.getCurrentTurn() === playerNumber;
 
   //set and send response data
+  responseData.room = {};
   if (isYourTurn) {
-    responseData.room = {};
     responseData.room.players = room.players;
     responseData.room.gameStatus = room.gameStatus;
     responseData.room.gameOverStatus = room.gameStatus.getGameOverStatus();
   } else {
-    responseData.room = null;
+    if (room.blocked) {
+      //will warn the user that the other player quit the room
+      responseData.room.blocked = room.blocked;
+    } else {
+      responseData.room = null;
+    }
   }
   res.json(responseData);
 }
