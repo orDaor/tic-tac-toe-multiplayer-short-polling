@@ -72,7 +72,7 @@ db.connectToDatabase()
     //start cyclical process for cleaning inactive rooms in the DB
     //NOTE: every 3 hour it deletes the rooms which have been inactive for more than 3 hours
     const oneHour_ms = 1000 * 60 * 60;
-    Room.deleteInactiveRoomsCiclically(3 * oneHour_ms, 3 * oneHour_ms);
+    Room.deleteInactiveRoomsCiclically(1 * oneHour_ms, 1 * oneHour_ms);
   })
   .catch(function (error) {
     //catch error if connection to database fails
