@@ -26,6 +26,8 @@ async function joinRandomRoom(req, res, next) {
     return;
   }
 
+  const playerName = req.body.name.trim();
+
   //check if a room is already assigned to the client
   const sessionGameData = req.session.gameData;
   let roomId;
@@ -56,7 +58,7 @@ async function joinRandomRoom(req, res, next) {
     symbol = newRoom.getAvailableGameSymbol(); //default = X in an empty room
 
     //create a player with the user input data and save it inside the room
-    player = new Player(req.body.name, symbol, playerNumber, true, false);
+    player = new Player(playerName, symbol, playerNumber, true, false);
     newRoom.addPlayer(player);
 
     //save the new created room in the DB
@@ -118,7 +120,7 @@ async function joinRandomRoom(req, res, next) {
 
   //create a player with the user input data and save it inside the room
   player = new Player(
-    req.body.name,
+    playerName,
     symbol,
     playerNumber,
     hasPlayerTurn,
@@ -171,6 +173,8 @@ async function createAndJoinPrivateRoom(req, res, next) {
     return;
   }
 
+  const playerName = req.body.name.trim();
+
   //check if a room is already assigned to the client
   const sessionGameData = req.session.gameData;
   let roomId;
@@ -187,7 +191,7 @@ async function createAndJoinPrivateRoom(req, res, next) {
   const symbol = newRoom.getAvailableGameSymbol(); //default = X in an empty room
 
   //create a player with the user input data and save it inside the room
-  const player = new Player(req.body.name, symbol, playerNumber, true, false);
+  const player = new Player(playerName, symbol, playerNumber, true, false);
   newRoom.addPlayer(player);
 
   //save the new created room in the DB
@@ -250,6 +254,8 @@ async function joinPrivateRoom(req, res, next) {
     return;
   }
 
+  const playerName = req.body.name.trim();
+
   //check whether the client is allowed to join this private room
   let room;
   try {
@@ -274,7 +280,7 @@ async function joinPrivateRoom(req, res, next) {
 
   //create a player with the user input data and save it inside the room
   const player = new Player(
-    req.body.name,
+    playerName,
     symbol,
     playerNumber,
     hasPlayerTurn,
