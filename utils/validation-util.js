@@ -11,9 +11,9 @@ function isUserInputValid(userInput) {
   if (!userInput) {
     return false;
   }
-  const isEmpty = !userInput.name || userInput.name.trim() === "";
-  const lengthOk = userInput.name.length >= 3 && userInput.name.length <= 15;
-  return lengthOk && !isEmpty;
+  const userName = userInput.name.trim();
+  const lengthOk = userName.length >= 3 && userName.length <= 15;
+  return lengthOk;
 }
 
 //exports
