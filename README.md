@@ -60,7 +60,7 @@ A **controller** is defined for each route set (except for the base routes), and
 
 - MondoDB **database** → **_tic-tac-toe_**
 
-- MondoDB **collections** in tic-tac-toe database:
+- MondoDB **collections** in _tic-tac-toe_ database:
   - _sessions_
   - _rooms_
 
@@ -68,7 +68,58 @@ A **controller** is defined for each route set (except for the base routes), and
   - **_id** → document Id
   - **...**
   - **gameData**:
-    - roomId 
-    - playerNumber
+    - roomId (ObjectId)
+    - playerNumber (number)
 
 - single MondoDB **document** in **_rooms_** collection → an object of **class Room** representing a game room for 2 players.
+
+## MVC BACKEND DESIGN: MODELS
+The following are the classes defined in the backend for handling game rooms:
+
+- **Room**
+  - <ins>properties</ins>:
+    - **players** (array of 2 objects of class Player)
+    - **gameStatus** (GameStatus class object)
+    - **availabl**e (bool) → a room is available if at least one player slot is not occupied (empty).
+    - **creationDate** (Date class object)
+    - **lastChangeDate**  (Date class object) → when a room is created, the last change date it is equal to creation date. Then, every time the game room data are updated, the last change date updates accordingly.
+    - **blocked** (bool) → a room gets blocked when:
+      - after a player leaves it, so that no other clients can be assigned to this room in the future.
+      - when a client finds a random room as available and wants to “book” it. During the process where the client is being assigned to this room, the room remains blocked, in order that it could not be assigned to other clients.
+    - **owned**  (bool) → private. A client creates a private room for inviting there another friend with a link.
+    - **roomId**  (bool) → id of the corresponding room document in the database.
+
+  - **<ins>NOTE</ins>**: a **room** is defined as **random** and **good to be assigned** to one client when it is the **first** room in the database which **matches** the following **conditions**:
+    - **room.available = TRUE**
+    - **room.blocked = FALSE**
+    - **room.owned = FALSE**
+
+  - **<ins>NOTE</ins>**: the **room assigning process** for a client is made of the following steps:
+    - a random room document in the database is found and “booked” (blocked). If no room is found a new one is created.
+    - an available (empty) player slot is found in the room.
+    - a Player class object is entered in the available player slot of the room with the player name chosen by the user.
+    - the room document in the database is updated with the new data. If a new room is created, a new room document is inserted in the database.
+    - the room id together with the available player slot number in the room are assigned to the game data in the user session.
+
+  - <ins>methods</ins>:
+    - **(static) createEmpty(isPrivate)** → creates a new empty room object, when no random room is found.
+    - **(static) fromMongoDBDocumentToRoom(document)** → converts a MondoDB room document into a Room class object.
+    - **(static) findAvailableAndBlock(roomIdToSkip)** → finds first available room and books it. Skips the room with the given id.
+    - **(static) findById(roomId)** → fetches from the database a room with the given id.
+    - **(static) findByIdAndCheckAccessRights(roomId, sessionGameData)** → checks whether a client can be assigned or access this room based on the game data of his/her session.
+    - **(static) deleteByFilter(query)** → deletes all rooms in the database matching the filter.
+    - **(static) deleteInactiveRoomsCiclically(delay, maxInactiveTime)** → deletes every “delay” milliseconds from the database all the rooms which have been inactive for too much time.
+    - **(static) blockById(roomId)** → when a player leaves a room , it will block it, so that no other player can join it.
+    - **isAvailable()** → checks if at least 1 player slot is available (empty) in this room.
+    - **save()** → saves a new game room in the database which has values equal to this room object; or updates the values of an existing room in the database with the values of this room.
+    - **getPlayer(playerNumber)** → returns a specific player of the room.
+    - **addPlayer(Player)** → occupies a player slot with a specific Player object.
+    - **removePlayer(playerNumber)** → removes one player in this room (empties the player slot).
+    - **setPlayersTurn(playerNumber)** → updates player turns info in the room given that the player with playerNumber made a successfull game move.
+    - **isPlayerSlotAvailable(playerNumber)** → checks if a player slot is empty.
+    - **getAvailablePlayerSlot()** → checks which player slot number in this room is available (empty).
+    - **getAvailableGameSymbol()** → returnes the symbol not used by players in the room yet.
+    - **InitGameRestart()** → sets game restart requests for this room.
+    - **isGameRestartInitialized()** → checks if a game restart in this room was already requested.
+    - **handleGameRestart(playerNumber)** → handles game restart requests.
+    - **fromRoomToMongoDBDocument()** → converts a Room class object into a room database document object.
