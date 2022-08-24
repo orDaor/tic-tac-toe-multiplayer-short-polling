@@ -54,3 +54,21 @@ A **controller** is defined for each route set (except for the base routes), and
 
 - **player** controller (**ajax**):
     - **GET: “/player/other”** → a player fetches the data of the other player in the room he/she is currently playing in.
+
+## MONGODB DATABASE
+**NoSQL** MondoDB database is used for **storing sessions and** game **rooms**:
+
+- MondoDB **database** → **_tic-tac-toe_**
+
+- MondoDB **collections** in tic-tac-toe database:
+  - _sessions_
+  - _rooms_
+
+- single MondoDB **document** in **_sessions_** collection → a standard client session. In the client session, we write to which game room the client is assigned, and which player number he/she is there (1 or 2):
+  - **_id** → document Id
+  - **...**
+  - **gameData**:
+    - roomId 
+    - playerNumber
+
+- single MondoDB **document** in **_rooms_** collection → an object of **class Room** representing a game room for 2 players.
