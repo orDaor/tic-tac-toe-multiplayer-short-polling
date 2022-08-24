@@ -1,6 +1,6 @@
 ## Try this tic-tac-toe multiplayer game at [Heroku](https://fierce-bastion-95723.herokuapp.com/)!
 Play tic-tac-toe vs another player. Invite a Friend with a link in a private room or join a random one!
-This is a SPA built with **HTML**, **CSS**, **JS**, **Node.js/Express** and **MongoDB**. Short server polling of 2s is used for fetching game status data. No frontend framework is used.
+This is a SPA built with **HTML**, **CSS**, **JS**, **Node.js/Express** and **MongoDB**. Short server **polling** of 2s is used for fetching game status data. No frontend framework is used.
 
 ## HOW DOES IT WORK?
 
@@ -23,3 +23,34 @@ This is a SPA built with **HTML**, **CSS**, **JS**, **Node.js/Express** and **Mo
 - When the connection with the database is established, an asynchronous process will start which **once an hour** will **remove inactive rooms** from the database.
       
 **<ins>NOTE</ins>**: **only the backend code contains the actual game status of a game room**, and only the backend is able to decide whether a player won or the game ended with a draw. What the user sees on the game reflects exaclty the game data stored and processed in the backend.
+
+## MVC BACKEND DESIGN: ROUTES AND CONTROLLERS
+
+**Routes** are groupped in these sets:
+
+- base
+- game config 
+- game play 
+- game room
+- player
+
+A **controller** is defined for each route set (except for the base routes), and each controller contains its controller actions. In the following are described the **end-points** handled by the different controller actions:
+
+- **game config** controller:
+
+    - **GET: “/game”** → get the main game page, which lets a user enter his/her name for joining a random room or a new private one to which invite a friend with an invitation link.
+    - **GET: “/game/new/friend/roomId”** → get the page from which a user can enter his/her name to join the private room of a friend who shared this invitation link with him/her.
+
+- **game play** controller (**ajax**):
+
+    - **GET: “/game/room”** → the user requests the current game status of the room to which his/her session is mapped.
+    - **POST: “/game/status”** → the user requests to update the game status when performing a game move.
+    - **POST: “/game/restart”** → the user requests to restart the game with the same other player in the room he/she is currently in, after game is over.
+
+- **game room** controller (**ajax**):
+    - **POST: “/game/new”** → a user requests to join a random room.
+    - **POST: “/game/new/friend”** → a user requests a new private room where to invite a friend with an invitation link. The link is pointing to this private room in the database.
+    - **POST: “/game/new/friend/roomId”** →  a user requests to join a private room after he/she got an invitation link.
+
+- **player** controller (**ajax**):
+    - **GET: “/player/other”** → a player fetches the data of the other player in the room he/she is currently playing in.
