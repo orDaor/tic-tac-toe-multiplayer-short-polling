@@ -1,10 +1,10 @@
 ## Try this tic-tac-toe multiplayer game at [Heroku](https://fierce-bastion-95723.herokuapp.com/)!
 Play tic-tac-toe vs another player. Invite a Friend with a link in a private room or join a random one!
-This is a SPA built with **HTML**, **CSS**, **JS**, **Node.js/Express** and **MongoDB**. Short server **polling** of 2s is used for fetching game status data. No frontend framework is used.
+This application is built with **HTML**, **CSS**, **JS**, **Node.js/Express** and **MongoDB**. Short server **polling** of 2s is used for fetching game status data. No frontend framework is used.
 
 ## HOW DOES IT WORK?
 
-There is only one **single** game web **page**, where the DOM gets continuously updated by JavaScript.
+There is one **main** web **page**, where the DOM gets continuously updated by JavaScript.
 
 ### Game Rooms
 - Any time, a player can join a **new room** by choosing his/her name. The room will be either a **random** one **or** a **private** one where he/she can invite another player by generating an invitation link. The **room id** and the **player number** to which a client is mapped to (game data) are contained in the **user session**.
