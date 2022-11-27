@@ -1,4 +1,4 @@
-## Try this tic-tac-toe multiplayer game at [Heroku](https://fierce-bastion-95723.herokuapp.com/)!
+## Try this tic-tac-toe multiplayer game at Heroku [<ins>Here</ins>](https://fierce-bastion-95723.herokuapp.com/)!
 Play tic-tac-toe vs another player. Invite a Friend with a link in a private room or join a random one!
 This application is built with **HTML**, **CSS**, **JS**, **Node.js/Express** and **MongoDB**. Short server **polling** of 2s is used for fetching game status data. No frontend framework is used.
 
