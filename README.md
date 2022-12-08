@@ -1,6 +1,6 @@
 | **GAME VIEW** |
 | ------------- |
-| ![Game view](assets/game-view-3.PNG?raw=true)  | 
+| ![Game view](assets/game-view.PNG?raw=true)  | 
 
 ## Try this tic-tac-toe multiplayer game at Heroku [<ins>Here</ins>](https://fierce-bastion-95723.herokuapp.com/)!
 Play tic-tac-toe vs another player. Invite a Friend with a link in a private room or join a random one!
