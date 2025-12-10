@@ -2,6 +2,19 @@
 | ------------- |
 | ![Game view](assets/game-view.PNG?raw=true)  | 
 
+## How to run the project locally
+After cloning the repo, move onto the project root directory and run<br>
+`npm install`<br>
+to install the packages of the project.<br>
+<br>
+Then start the node server with nodemon (live reload feature) on port 3000<br>
+`npm start`<br>
+or simply run<br>
+`node app.js`<br>
+<br>
+To locally serve the web page enter in the browser<br>
+`http://localhost:3000`
+
 ## Features
 Play tic-tac-toe vs another player. Invite a Friend with a link in a private room or join a random one.
 This application is built with **HTML**, **CSS**, **JS**, **Node.js/Express** and **MongoDB**. Short server **polling** of 2s is used for fetching game status data. No frontend framework is used.
